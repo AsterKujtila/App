@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SELLR — AI Sales Coach for Whop Sellers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--cr:#f0ede8;--cr2:#e8e4de;--cr3:#ddd8d0;--br:#2a1a14;--br2:#5a3a2e;--br3:#8a7a74;--tr:#c4724a;--tr2:#e8956d;--trs:#f5e8e0;--bd:#e0d8d0;--hero:#2d3a45;--ft:#1a0a08;--sp:cubic-bezier(.22,1,.36,1);--bo:cubic-bezier(.34,1.56,.64,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Figtree',sans-serif;background:var(--cr);color:var(--br);overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea{font-family:inherit;font-size:16px}
+::selection{background:rgba(196,114,74,.16);color:var(--br)}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:9px}
+
+/* SCREENS */
+.scr{display:none!important}
+.scr.on{display:block!important}
+#scr-dash.on{display:flex!important}
+#scr-login.on{display:flex!important}
+
+/* ANIMATIONS */
+@keyframes fu{from{opacity:0;transform:translate3d(0,22px,0)}to{opacity:1;transform:none}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes wu{to{opacity:1;transform:none}}
+@keyframes ping{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.3);opacity:0}}
+@keyframes fl{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-7px,0)}}
+@keyframes db{0%,100%{transform:translate3d(0,0,0) scale(1);opacity:.4}50%{transform:translate3d(0,-6px,0) scale(1.2);opacity:1}}
+@keyframes od{0%,100%{transform:translate3d(0,0,0) scale(1)}25%{transform:translate3d(3%,-4%,0) scale(1.06)}50%{transform:translate3d(-2%,3%,0) scale(.97)}75%{transform:translate3d(4%,2%,0) scale(1.04)}}
+@keyframes mi{from{opacity:0;transform:translate3d(0,10px,0) scale(.95)}to{opacity:1;transform:none}}
+@keyframes sk{0%,100%{transform:none}25%{transform:translate3d(-6px,0,0)}75%{transform:translate3d(6px,0,0)}}
+@keyframes cp{from{transform:scale(0);opacity:0}70%{transform:scale(1.2)}to{transform:scale(1);opacity:1}}
+@keyframes gr{0%,100%{transform:translate3d(0,0,0)}10%{transform:translate3d(-3%,-4%,0)}30%{transform:translate3d(-2%,5%,0)}50%{transform:translate3d(-4%,4%,0)}70%{transform:translate3d(-5%,2%,0)}90%{transform:translate3d(4%,-3%,0)}}
+@keyframes sc{0%{top:-1%}100%{top:101%}}
+@keyframes sl{from{transform:translateX(-100%)}to{transform:none}}
+@keyframes sp{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+body::before{content:'';position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.022;will-change:transform;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 200px;animation:gr 8s steps(10) infinite}
+
+/* SCROLL REVEAL */
+.rv{opacity:0;transform:translate3d(0,30px,0);transition:opacity .72s var(--sp),transform .72s var(--sp)}
+.rv.on{opacity:1;transform:none}
+.rvs{opacity:0;transform:scale(.93);transition:opacity .68s var(--sp),transform .68s var(--sp)}
+.rvs.on{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+/* ═══ LANDING ═══ */
+#l-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid transparent;transition:background .35s,border-color .35s,backdrop-filter .35s}
+#l-nav.stuck{background:rgba(240,237,232,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-color:var(--bd)}
+.logo{display:inline-flex;align-items:center;background:var(--br);color:#fff;padding:9px 20px;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer;transition:transform .22s var(--sp),box-shadow .22s}
+.logo:hover{transform:scale(1.05);box-shadow:0 8px 28px rgba(42,26,20,.1)}
+.logo .ai{color:var(--tr);font-weight:300}
+.nav-r{display:flex;align-items:center;gap:4px}
+.nav-a{font-size:14px;color:rgba(42,26,20,.55);padding:8px 14px;border-radius:999px;transition:color .15s,background .15s}
+.nav-a:hover{color:var(--br);background:rgba(42,26,20,.05)}
+.nav-cta{background:var(--br)!important;color:#fff!important;font-weight:600;border-radius:999px;transition:transform .22s var(--sp),box-shadow .22s}
+.nav-cta:hover{transform:translateY(-2px)!important;box-shadow:0 8px 28px rgba(42,26,20,.1)!important}
+.ham{display:none;width:42px;height:42px;border-radius:50%;background:var(--cr2);align-items:center;justify-content:center}
+
+/* MOBILE MENU */
+#mob-m{position:fixed;inset:0;z-index:200;background:var(--hero);display:flex;flex-direction:column;padding:22px;transform:scaleY(0);transform-origin:top center;transition:transform .42s var(--sp);pointer-events:none}
+#mob-m.open{transform:scaleY(1);pointer-events:all}
+.mm-x{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;transition:transform .3s var(--sp)}
+#mob-m.open .mm-x{transform:rotate(90deg)}
+.mm-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:8px;margin-top:70px}
+.mm-row{display:flex;align-items:center;justify-content:space-between;padding:15px 14px;border-bottom:1px solid rgba(255,255,255,.07);color:#fff;font-size:16px;font-weight:500;border-radius:12px;transition:background .15s,transform .2s var(--sp)}
+.mm-row:last-child{border-bottom:none}
+.mm-row:hover{background:rgba(255,255,255,.06);transform:translateX(4px)}
+.mm-get{display:block;width:100%;text-align:center;background:var(--br);color:#fff;padding:15px;border-radius:999px;font-size:15px;font-weight:700;margin-top:auto;transition:transform .25s var(--sp)}
+.mm-get:hover{transform:translateY(-2px)}
+
+/* BUTTONS */
+.btn-p{display:inline-flex;align-items:center;gap:7px;background:var(--tr);color:#fff;padding:15px 28px;border-radius:999px;font-weight:700;font-size:15px;transition:all .25s var(--sp)}
+.btn-p:hover{background:var(--tr2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(196,114,74,.25)}
+.btn-p:active{transform:scale(.97)}
+.btn-gl{display:inline-flex;align-items:center;gap:7px;background:transparent;color:#fff;padding:15px 26px;border-radius:999px;border:1.5px solid rgba(255,255,255,.28);font-weight:500;font-size:15px;transition:all .25s var(--sp)}
+.btn-gl:hover{border-color:rgba(255,255,255,.68);background:rgba(255,255,255,.08);transform:translateY(-3px)}
+.btn-gd{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--br);padding:13px 24px;border-radius:999px;border:1.5px solid rgba(42,26,20,.22);font-weight:500;font-size:15px;transition:all .25s var(--sp)}
+.btn-gd:hover{border-color:rgba(42,26,20,.45);background:rgba(42,26,20,.05);transform:translateY(-2px)}
+.btn-gw{display:inline-flex;align-items:center;gap:7px;background:transparent;color:#fff;padding:12px 24px;border-radius:999px;border:1.5px solid rgba(255,255,255,.3);font-weight:500;font-size:14.5px;transition:all .25s var(--sp)}
+.btn-gw:hover{border-color:rgba(255,255,255,.75);background:rgba(255,255,255,.09);transform:translateY(-2px)}
+
+/* HERO */
+#hero{min-height:100svh;background:var(--hero);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:118px 60px 78px;gap:40px}
+.orb{position:absolute;border-radius:50%;pointer-events:none;animation:od var(--d,20s) ease-in-out infinite;will-change:transform}
+.o1{width:640px;height:640px;top:-140px;right:-100px;background:radial-gradient(ellipse,rgba(196,114,74,.13),transparent 70%);--d:20s}
+.o2{width:520px;height:520px;bottom:-120px;left:-140px;background:radial-gradient(ellipse,rgba(240,237,232,.055),transparent 70%);--d:26s;animation-direction:reverse}
+.o3{width:420px;height:420px;top:50%;left:32%;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(42,26,20,.18),transparent 70%);--d:16s;animation-delay:-8s}
+.h-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(196,114,74,.15);border:1px solid rgba(196,114,74,.3);color:rgba(240,237,232,.85);padding:8px 18px;border-radius:999px;font-size:13px;font-weight:500;margin-bottom:34px;animation:fl 3.5s ease-in-out infinite;position:relative;z-index:1}
+.bdot{width:6px;height:6px;border-radius:50%;background:#4ade80;flex-shrink:0;position:relative}
+.bdot::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:#4ade80;opacity:0;animation:ping 2.2s ease-out infinite}
+.h-h{font-family:'Fraunces',serif;font-size:clamp(50px,7.5vw,108px);font-weight:900;letter-spacing:-.04em;line-height:.93;margin-bottom:26px;position:relative;z-index:1}
+.h-h .ln{display:block;overflow:hidden}
+.h-h .wd{display:inline-block;opacity:0;transform:translate3d(0,110%,0);animation:wu .78s var(--sp) forwards}
+.w1{animation-delay:.10s;color:#fff}.w2{animation-delay:.20s;color:#fff}.w3{animation-delay:.31s;color:#fff;font-style:italic;font-weight:300}.w4{animation-delay:.43s;color:var(--tr)}
+.h-sub{font-size:clamp(15px,1.6vw,18.5px);font-weight:300;color:rgba(240,237,232,.62);max-width:460px;line-height:1.65;margin-bottom:42px;position:relative;z-index:1;opacity:0;animation:fu .62s var(--sp) .78s forwards}
+.h-ctas{display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:1;opacity:0;animation:fu .6s var(--sp) .96s forwards}
+.h-ph{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;opacity:0;animation:fu .9s var(--sp) .5s forwards}
+.scue{position:absolute;bottom:32px;left:60px;z-index:1;display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,.28);opacity:0;animation:fi .5s ease 1.6s forwards}
+
+/* IPHONE */
+.iph{width:285px;flex-shrink:0;background:#1a1a2e;border-radius:44px;border:8px solid #1a1a2e;box-shadow:0 50px 100px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12);position:relative;overflow:hidden;aspect-ratio:9/19.5}
+.iph-n{position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:6px;background:#1a1a2e;border-radius:0 0 8px 8px;z-index:5}
+.iph-b{position:absolute;right:-3px;width:3px;height:28px;background:#111827;border-radius:0 2px 2px 0}
+.iph-sc{width:100%;height:100%;background:linear-gradient(165deg,#f5d5c5,#e8b89a);border-radius:36px;display:flex;flex-direction:column;overflow:hidden}
+.iph-hd{padding:34px 18px 12px;font-family:'Fraunces',serif;font-weight:700;font-size:24px;color:var(--br)}
+.iph-bl{margin:0 14px 9px;align-self:flex-end;background:#fff;border-radius:999px;padding:8px 13px;font-size:11.5px;color:var(--br)}
+.iph-rp{margin:0 16px 9px;font-size:11.5px;font-weight:300;color:#3a2a24;line-height:1.5}
+.iph-ins{margin:0 14px 9px;background:rgba(255,255,255,.76);border-radius:13px;padding:10px 12px}
+.iph-ins-l{font-size:9px;font-weight:700;color:var(--tr);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.iph-ins-t{font-family:'Fraunces',serif;font-size:11.5px;color:var(--br);line-height:1.3;margin-bottom:5px}
+.iph-ins-tg{background:rgba(196,114,74,.15);border-radius:999px;padding:3px 9px;display:inline-block;font-size:9px;font-weight:700;color:var(--tr)}
+.iph-sh{margin-top:auto;background:#fff;border-radius:20px 20px 0 0;padding:12px}
+.iph-ip{display:flex;align-items:center;gap:8px;background:var(--cr2);border-radius:999px;padding:9px 13px}
+.iph-ip-t{font-size:10.5px;color:rgba(42,26,20,.36)}
+.iph-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:8px}
+.iph-tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;border-radius:10px;font-size:8.5px;color:rgba(42,26,20,.4)}
+.iph-tab.on{color:var(--tr)}
+.iph-tab-ic{width:20px;height:20px;border-radius:50%;background:var(--cr2);display:flex;align-items:center;justify-content:center;font-size:9px}
+.iph-tab.on .iph-tab-ic{background:var(--trs)}
+.fbg{position:absolute;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 16px 48px rgba(42,26,20,.14);animation:fl var(--fd,3.5s) ease-in-out infinite}
+.fb-r{top:15%;right:-4%;--fd:3.4s}.fb-l{bottom:26%;left:-5%;--fd:4.2s;animation-delay:-1.5s}
+.fb-st{color:var(--tr);font-size:11px}.fb-tt{font-size:12px;font-weight:600;color:var(--br)}.fb-sb{font-size:10.5px;color:var(--br3)}
+
+/* LAND SECTIONS */
+#l-teal{background:radial-gradient(ellipse at 30% 50%,#b8d4c8,#8fb8a8,#6a9990);padding:100px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;overflow:hidden}
+.ps-bg{display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--br2);margin-bottom:18px}
+.ps-bg::before{content:'■ ';color:var(--tr)}
+.ps-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(30px,4.5vw,50px);line-height:1.1;letter-spacing:-.02em;margin-bottom:15px;color:var(--br)}
+.ps-h em{font-style:italic;color:var(--tr)}
+.ps-p{font-weight:300;font-size:15px;color:var(--br2);line-height:1.65;max-width:400px;margin-bottom:24px}
+#l-tl{background:var(--cr);padding:108px 60px;text-align:center}
+.tl-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,5.5vw,64px);letter-spacing:-.03em;line-height:1.12;margin-bottom:18px}
+.tl-dk{color:var(--br)}.tl-ac{color:var(--tr)}.tl-dm{color:var(--br3)}
+.tl-p{font-weight:300;font-size:16px;color:var(--br2);max-width:440px;margin:0 auto 32px}
+.fc{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 60px;overflow:hidden}
+.fc1{background:linear-gradient(135deg,#3a4a3a,#2a3a2a)}.fc2{background:linear-gradient(135deg,#1a2e1a,#0d1f0d)}.fc3{background:linear-gradient(135deg,#3a0808,#1a0404)}.fc4{background:linear-gradient(135deg,#0a1628,#1a3a5c)}
+.fc-in{max-width:1100px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.fc-bg{font-size:11px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px;display:inline-flex;align-items:center;gap:5px}
+.fc-bg::before{content:'■ ';color:rgba(255,255,255,.24)}
+.fc-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(30px,4.5vw,52px);line-height:1.1;letter-spacing:-.03em;color:#fff;margin-bottom:13px}
+.fc-h em{font-style:italic;opacity:.65}
+.fc-p{font-weight:300;font-size:15px;color:rgba(255,255,255,.52);line-height:1.65;max-width:380px;margin-bottom:26px}
+.fc-card{background:rgba(255,255,255,.06);border-radius:20px;padding:24px;border:1px solid rgba(255,255,255,.09);transition:background .3s,transform .35s var(--sp)}
+.fc-card:hover{background:rgba(255,255,255,.10);transform:translateY(-5px)}
+.fc-card-l{font-size:10.5px;color:rgba(255,255,255,.3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px}
+.fc-card-h{font-family:'Fraunces',serif;font-size:17px;color:#fff;margin-bottom:9px;line-height:1.3}
+.fc-card-p{font-size:13px;color:rgba(255,255,255,.46);line-height:1.55}
+.fc-tags{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.tag-tr{background:rgba(196,114,74,.18);color:var(--tr);padding:5px 11px;border-radius:999px;font-size:10.5px;font-weight:600}
+.tag-dim{background:rgba(255,255,255,.06);color:rgba(255,255,255,.36);padding:5px 11px;border-radius:999px;font-size:10.5px}
+.st{display:inline-flex;align-items:center;gap:11px;background:var(--br);color:#fff;padding:0 18px;height:42px;border-radius:999px;font-weight:700;font-size:13px;flex-shrink:0}
+.st-ds{display:flex;gap:5px;align-items:center}
+.st-d{width:5.5px;height:5.5px;border-radius:50%;background:var(--tr);animation:db .72s ease-in-out infinite}
+.st-d:nth-child(2){animation-delay:.15s}.st-d:nth-child(3){animation-delay:.3s}
+.fc-cb{background:rgba(255,255,255,.12);border-radius:20px;padding:17px 21px;border:1px solid rgba(255,255,255,.09);font-size:15px;font-weight:300;color:#fff;line-height:1.6;margin-bottom:11px}
+.fc-ar{background:rgba(255,255,255,.09);border-radius:17px 17px 17px 3px;padding:13px 16px;border:1px solid rgba(255,255,255,.07);font-size:13px;font-weight:300;color:rgba(255,255,255,.78);line-height:1.6;margin-top:9px}
+.mini-ph{width:186px;background:#2a0f0f;border-radius:26px;border:4px solid #1a0808;box-shadow:0 20px 50px rgba(0,0,0,.55);overflow:hidden}
+.mini-sc{background:linear-gradient(180deg,#3a0a0a,#1a0404);padding:22px 15px;min-height:255px;display:flex;flex-direction:column}
+.mini-h{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:#fff;margin:auto 0 6px;line-height:1.2}
+.mini-s{font-size:10.5px;color:rgba(255,255,255,.36);line-height:1.5}
+.auto-card{background:rgba(255,255,255,.07);border:1px solid rgba(100,160,255,.14);border-radius:22px;padding:28px;transition:border-color .3s,transform .35s var(--sp)}
+.auto-card:hover{border-color:rgba(100,160,255,.28);transform:translateY(-5px)}
+.auto-bg{font-size:10px;color:rgba(100,170,255,.6);font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.auto-bg::before{content:'■ ';color:rgba(100,170,255,.4)}
+.auto-h{font-family:'Fraunces',serif;font-weight:300;font-size:30px;color:#fff;margin-bottom:9px;letter-spacing:-.02em;line-height:1.15}
+.auto-h em{font-style:italic;opacity:.6}
+.auto-p{font-weight:300;font-size:13.5px;color:rgba(255,255,255,.46);line-height:1.6;margin-bottom:18px}
+#l-typo{background:var(--cr);padding:130px 60px;text-align:center}
+.typo-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(32px,7vw,86px);letter-spacing:-.04em;line-height:1.04;max-width:900px;margin:0 auto}
+.tw{display:inline-block;margin:0 5px;color:var(--br3);transition:color .45s ease,transform .4s var(--sp);cursor:default}
+.tw:hover{transform:scale(1.07) translateY(-3px)}.tw.lit{color:var(--tr)}
+#l-rv{min-height:100vh;background:#0d0d0a;padding:100px 60px;position:relative;overflow:hidden}
+.rv-orb{position:absolute;border-radius:50%;pointer-events:none}
+.rv-o1{width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(ellipse,rgba(196,114,74,.08),transparent 70%);animation:od 20s ease-in-out infinite}
+.rv-o2{width:400px;height:400px;bottom:-60px;left:-80px;background:radial-gradient(ellipse,rgba(42,26,20,.22),transparent 70%);animation:od 26s ease-in-out infinite reverse}
+.rv-scan{position:absolute;left:0;right:0;height:1px;background:rgba(196,114,74,.055);animation:sc 8s linear infinite;pointer-events:none}
+.rv-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);background-size:40px 40px}
+.rv-hdr{text-align:center;margin-bottom:52px;position:relative;z-index:1}
+.rv-bg{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(196,114,74,.62);margin-bottom:16px;display:inline-flex;align-items:center;gap:6px}
+.rv-bg::before{content:'■ ';color:rgba(196,114,74,.42)}
+.rv-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,5.5vw,68px);line-height:1.05;letter-spacing:-.03em;color:#fff}
+.rv-h em{font-style:italic;color:var(--tr)}
+.dw{max-width:1100px;margin:0 auto;position:relative;z-index:1;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.07);box-shadow:0 50px 100px rgba(0,0,0,.65)}
+.dw-ch{background:#181410;padding:12px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.05)}
+.dw-ls{display:flex;gap:6px}.dw-l{width:10px;height:10px;border-radius:50%}
+.dw-url{margin:0 auto;background:rgba(255,255,255,.06);border-radius:999px;padding:4px 16px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.22)}
+.dw-body{background:#111008;display:flex;min-height:460px}
+.dw-side{width:180px;border-right:1px solid rgba(255,255,255,.05);padding:16px 10px;display:flex;flex-direction:column;flex-shrink:0}
+.dw-logo-p{background:var(--br);color:#fff;padding:7px 14px;border-radius:999px;font-weight:700;font-size:12px;text-align:center;margin-bottom:18px}
+.dw-logo-p .ai{color:var(--tr);font-weight:300}
+.dw-ni{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;font-size:11.5px;color:rgba(255,255,255,.36);margin-bottom:2px}
+.dw-ni.on{color:var(--tr);background:rgba(196,114,74,.08)}
+.dw-nid{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.dw-main{flex:1;padding:22px;display:flex;flex-direction:column;gap:15px;overflow:hidden}
+.dw-gr{font-family:'Fraunces',serif;font-weight:300;font-size:20px;color:#fff}
+.kpi-g{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.kpi{background:rgba(255,255,255,.04);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.055);transition:background .22s,transform .28s var(--sp)}
+.kpi:hover{background:rgba(255,255,255,.07);transform:translateY(-2px)}
+.kpi-l{font-size:10px;color:rgba(255,255,255,.28);margin-bottom:3px}
+.kpi-v{font-family:'Fraunces',serif;font-weight:700;font-size:21px;color:#fff;letter-spacing:-.02em}
+.kpi-t{display:inline-flex;align-items:center;gap:3px;background:rgba(74,222,128,.10);color:#4ade80;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:600;margin-top:4px}
+.dw-ch2{background:rgba(255,255,255,.03);border-radius:11px;padding:12px 15px;border:1px solid rgba(255,255,255,.048)}
+.dw-ch2-l{font-size:10px;color:rgba(255,255,255,.26);margin-bottom:8px}
+.bars{display:flex;align-items:flex-end;gap:4px;height:66px}
+.bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--tr),rgba(196,114,74,.18));transition:height 1.3s var(--sp)}
+.act-r{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.act-d{width:6px;height:6px;border-radius:50%;background:var(--tr);flex-shrink:0}
+.act-t{font-size:11px;color:rgba(255,255,255,.48);flex:1;line-height:1.4}
+.act-tm{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.18)}
+#l-smart{background:var(--cr);padding:108px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.sm-card{background:linear-gradient(135deg,#4a0e0e,#2a0808);border-radius:28px;padding:36px;display:flex;justify-content:center;align-items:center;min-height:370px;box-shadow:0 40px 80px rgba(42,26,20,.18);transition:transform .35s var(--sp)}
+.sm-card:hover{transform:translateY(-6px)}
+.sm-ph{width:174px;background:#1a0404;border-radius:24px;border:4px solid #0d0202;box-shadow:0 20px 50px rgba(0,0,0,.5);overflow:hidden}
+.sm-psc{background:linear-gradient(180deg,#2a0808,#1a0404);padding:20px 15px;min-height:248px;display:flex;flex-direction:column}
+.sm-ph-h{font-family:'Fraunces',serif;font-weight:700;font-size:17px;color:#fff;margin:auto 0 5px;line-height:1.2}
+.sm-ph-s{font-size:10.5px;color:rgba(255,255,255,.34);line-height:1.5}
+.sm-txt{text-align:center}
+.sm-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(30px,4.5vw,52px);letter-spacing:-.03em;line-height:1.1;margin-bottom:14px;color:var(--br)}
+.sm-p{font-weight:300;font-size:15px;color:var(--br2);line-height:1.65;max-width:420px;margin:0 auto 26px}
+#l-testi{background:var(--cr);padding:108px 60px;text-align:center}
+#l-testi h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(32px,5vw,56px);letter-spacing:-.03em;margin-bottom:40px;color:var(--br)}
+.t-ctrl{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:28px}
+.t-arr{width:44px;height:44px;border-radius:50%;border:1.5px dotted var(--bd);background:transparent;color:var(--br3);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s var(--sp)}
+.t-arr:hover{border-color:var(--tr);color:var(--tr);transform:scale(1.12);background:rgba(196,114,74,.07)}
+.t-dots{display:flex;gap:7px}
+.t-dot{width:7px;height:7px;border-radius:50%;background:var(--bd);cursor:pointer;transition:all .3s var(--sp)}
+.t-dot.on{background:var(--tr);width:20px;border-radius:999px}
+.t-card{max-width:480px;margin:0 auto;border-radius:22px;overflow:hidden;box-shadow:0 24px 64px rgba(42,26,20,.14);transition:box-shadow .35s,transform .35s var(--sp)}
+.t-card:hover{box-shadow:0 40px 80px rgba(42,26,20,.18);transform:translateY(-4px)}
+.t-top{height:210px;background:linear-gradient(165deg,#f5d5c5,#e8b89a);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.t-bot{background:#fff;padding:24px 28px;border-top:1px solid var(--bd)}
+.t-q{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:17px;color:var(--br);line-height:1.65;margin-bottom:12px}
+.t-a{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--br3)}
+#l-feat{background:var(--cr2);padding:78px 0}
+.feat-lbl{text-align:center;margin-bottom:24px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--br2)}
+.feat-lbl::before{content:'■ ';color:var(--tr)}
+.feat-tr{display:flex;gap:13px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 36px 18px;scrollbar-width:none;cursor:grab}
+.feat-tr::-webkit-scrollbar{display:none}
+.feat-tr:active{cursor:grabbing}
+.feat-c{min-width:295px;height:355px;scroll-snap-align:start;border-radius:18px;padding:24px;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:transform .32s var(--sp),box-shadow .32s}
+.feat-c:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.f1{background:linear-gradient(140deg,#1a1a1a,#2a180e)}.f2{background:linear-gradient(140deg,#0a1628,#1a2a3a)}.f3{background:linear-gradient(140deg,#1a0a1a,#2a1028)}.f4{background:linear-gradient(140deg,#0a1a0a,#0d1f0d)}.f5{background:linear-gradient(140deg,#1a100a,#2a1808)}
+.feat-ic{width:32px;height:32px;margin-bottom:auto;opacity:.55}
+.feat-h{font-family:'Fraunces',serif;font-size:20px;color:#fff;margin-bottom:6px;line-height:1.2}
+.feat-h strong{font-weight:700}.feat-h span{font-weight:300;opacity:.6;display:block}
+.feat-p{font-size:12px;font-weight:300;color:rgba(255,255,255,.42);line-height:1.5}
+#l-cta{background:var(--cr);padding:108px 60px;text-align:center}
+.cta-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(40px,7vw,78px);letter-spacing:-.04em;line-height:.93;color:var(--br);margin-bottom:42px}
+.cta-h em{font-style:italic;color:var(--tr)}
+.cta-box{max-width:420px;margin:0 auto;background:#fff;border-radius:28px;padding:28px;box-shadow:0 20px 60px rgba(42,26,20,.12);border:1px solid rgba(42,26,20,.05);transition:box-shadow .35s}
+.cta-box:focus-within{box-shadow:0 30px 80px rgba(42,26,20,.17)}
+.wl-in{width:100%;background:var(--cr2);border:1.5px solid var(--bd);border-radius:999px;padding:13px 18px;margin-bottom:10px;font-size:16px;color:var(--br);outline:none;transition:border-color .2s,background .2s}
+.wl-in:focus{border-color:var(--tr);background:#fff}
+.wl-in.err{border-color:var(--tr)!important;animation:sk .4s var(--sp)}
+.wl-in::placeholder{color:rgba(42,26,20,.32)}
+.wl-btn{width:100%;padding:14px;border-radius:999px;background:var(--br);color:#fff;font-weight:700;font-size:15px;transition:transform .25s var(--sp),box-shadow .25s;margin-bottom:16px}
+.wl-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(42,26,20,.10)}
+.wl-btn:active{transform:scale(.97)}
+.trust-r{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.trust-i{font-size:12px;color:var(--br3)}.trust-i::before{content:'✓ ';color:var(--tr)}
+#wl-ok{display:none;text-align:center}
+.wl-chk{width:52px;height:52px;border-radius:50%;background:var(--tr);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 14px;animation:cp .55s var(--bo)}
+.wl-ok-h{font-family:'Fraunces',serif;font-weight:300;font-size:24px;color:var(--br);margin-bottom:5px}
+.wl-ok-p{font-size:13.5px;color:var(--br2)}
+.wl-pos{color:var(--tr);font-weight:600}
+#l-faq{background:var(--cr2);padding:88px 60px}
+#l-faq h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(42px,7vw,78px);letter-spacing:-.04em;text-align:center;margin-bottom:40px;color:var(--br)}
+.faq-box{max-width:640px;margin:0 auto;background:rgba(240,237,232,.7);border-radius:20px;border:1px solid var(--bd);overflow:hidden}
+.faq-item{border-bottom:1px solid var(--bd)}.faq-item:last-child{border-bottom:none}
+.faq-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:none;font-weight:500;font-size:15px;color:var(--br);text-align:left;gap:12px;transition:background .15s,color .15s}
+.faq-btn:hover{background:rgba(42,26,20,.03);color:var(--tr)}
+.faq-ic{width:24px;height:24px;border-radius:50%;border:1.5px dotted var(--bd);display:flex;align-items:center;justify-content:center;color:var(--br3);font-size:14px;flex-shrink:0;transition:transform .35s var(--sp),border-color .2s,color .2s,background .2s}
+.faq-item.open .faq-ic{transform:rotate(45deg);border-color:var(--tr);color:var(--tr);background:var(--trs)}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .45s var(--sp)}
+.faq-item.open .faq-ans{max-height:260px}
+.faq-ai{margin:0 8px 8px;padding:4px 14px 16px;font-weight:300;font-size:14px;color:var(--br2);line-height:1.72;background:rgba(255,255,255,.62);border-radius:0 0 12px 12px}
+footer{background:var(--ft);padding:70px 60px 34px}
+.ft-top{display:flex;justify-content:space-between;gap:56px;margin-bottom:50px;flex-wrap:wrap}
+.ft-logo{display:inline-flex;align-items:center;background:rgba(255,255,255,.08);color:#fff;padding:8px 18px;border-radius:999px;font-weight:700;font-size:14.5px;margin-bottom:15px;transition:background .2s;cursor:pointer}
+.ft-logo:hover{background:rgba(255,255,255,.14)}
+.ft-logo .ai{color:var(--tr);font-weight:300}
+.ft-tag{font-family:'Fraunces',serif;font-weight:300;font-size:24px;color:rgba(255,255,255,.6);line-height:1.32;max-width:230px}
+.ft-tag em{font-style:italic;color:rgba(255,255,255,.34)}
+.ft-cols{display:flex;gap:50px;flex-wrap:wrap}
+.ft-col h4{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:13px}
+.ft-col a{display:block;font-size:13px;font-weight:300;color:rgba(255,255,255,.36);margin-bottom:8px;cursor:pointer;transition:color .15s,transform .2s var(--sp)}
+.ft-col a:hover{color:rgba(255,255,255,.78);transform:translateX(3px)}
+.ft-bot{border-top:1px solid rgba(255,255,255,.06);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ft-d{font-size:11px;color:rgba(255,255,255,.18)}
+
+/* ═══ LOGIN ═══ */
+#scr-login{min-height:100dvh;background:var(--hero);display:none;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+.l-card{background:#fff;border-radius:28px;padding:38px 32px;width:100%;max-width:400px;box-shadow:0 50px 100px rgba(0,0,0,.35);position:relative;z-index:1;animation:fi .5s ease}
+.l-logo{font-weight:700;font-size:22px;color:var(--br);margin-bottom:6px}
+.l-logo .ai{color:var(--tr);font-weight:300}
+.l-sub{font-size:14px;font-weight:300;color:var(--br3);margin-bottom:28px}
+.l-lbl{display:block;font-size:11px;font-weight:700;color:var(--br2);margin-bottom:5px;letter-spacing:.07em;text-transform:uppercase}
+.l-in{width:100%;background:var(--cr2);border:1.5px solid var(--bd);border-radius:14px;padding:13px 16px;font-size:16px;color:var(--br);outline:none;margin-bottom:13px;display:block;transition:border-color .2s,background .2s;box-sizing:border-box}
+.l-in:focus{border-color:var(--tr);background:#fff}
+.l-in.err{border-color:#ef4444!important;animation:sk .4s var(--sp)}
+.l-in::placeholder{color:rgba(42,26,20,.32)}
+.l-err{padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#dc2626;font-size:13px;margin-bottom:13px;display:none;animation:fi .3s ease}
+.l-btn{width:100%;padding:14px;border-radius:999px;background:var(--br);color:#fff;font-weight:700;font-size:15px;transition:transform .25s var(--sp),box-shadow .25s,opacity .2s;margin-bottom:12px}
+.l-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 32px rgba(42,26,20,.12)}
+.l-btn:active:not(:disabled){transform:scale(.97)}
+.l-btn:disabled{opacity:.6;cursor:not-allowed}
+.l-sep{display:flex;align-items:center;gap:10px;margin-bottom:12px;color:var(--br3);font-size:12px}
+.l-sep::before,.l-sep::after{content:'';flex:1;height:1px;background:var(--bd)}
+.l-whop{width:100%;padding:13px;border-radius:999px;background:var(--cr2);color:var(--br);font-weight:600;font-size:14px;border:1.5px solid var(--bd);transition:all .22s var(--sp);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+.l-whop:hover:not(:disabled){border-color:var(--tr);background:var(--trs);color:var(--tr)}
+.l-whop:disabled{opacity:.6;cursor:not-allowed}
+.l-back{font-size:13px;color:var(--br3);text-align:center}
+.l-back span{color:var(--tr);font-weight:600;cursor:pointer}
+.l-back span:hover{text-decoration:underline}
+.l-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:20px;color:var(--br3);font-size:13px}
+.spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--tr);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+
+/* ═══ DASHBOARD ═══ */
+#scr-dash{height:100dvh;overflow:hidden;display:none;flex-direction:row}
+.d-sb{width:210px;background:var(--ft);display:flex;flex-direction:column;padding:18px 10px;height:100dvh;flex-shrink:0}
+.d-sb-logo{padding:4px 8px 16px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:12px}
+.d-sb-logo-t{font-weight:700;font-size:16px;color:#fff}
+.d-sb-logo-t .ai{color:var(--tr);font-weight:300}
+.d-sb-logo-s{font-size:10px;color:rgba(255,255,255,.28);margin-top:2px}
+.d-ni{width:100%;display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:12px;margin-bottom:2px;border:none;cursor:pointer;font-family:'Figtree',sans-serif;text-align:left;background:transparent;color:rgba(255,255,255,.38);font-size:13.5px;font-weight:400;transition:all .18s}
+.d-ni:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.72)}
+.d-ni.on{color:var(--tr);background:rgba(196,114,74,.10);font-weight:600}
+.d-ni-ic{font-size:15px;flex-shrink:0}
+.d-credits-box{border-top:1px solid rgba(255,255,255,.07);padding-top:14px;display:flex;align-items:center;gap:10px;margin-top:auto}
+.d-cr-ring{width:38px;height:38px;border-radius:50%;background:rgba(42,26,20,.8);border:3px solid rgba(196,114,74,.4);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;flex-shrink:0}
+.d-cr-t{font-size:12px;color:rgba(255,255,255,.55);font-weight:500}
+.d-cr-link{font-size:11px;color:var(--tr);background:none;border:none;cursor:pointer;font-family:'Figtree',sans-serif;font-weight:500;padding:0;display:block}
+.d-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--cr);min-width:0}
+.d-topbar{height:58px;background:rgba(240,237,232,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0}
+.d-title{font-family:'Fraunces',serif;font-weight:300;font-size:20px;color:var(--br)}
+.d-user{display:flex;align-items:center;gap:10px}
+.d-av{width:34px;height:34px;border-radius:50%;background:var(--br);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;overflow:hidden}
+.d-av img{width:100%;height:100%;object-fit:cover}
+.d-uname{font-size:13px;color:var(--br3)}
+.d-logout{padding:6px 12px;border-radius:999px;background:rgba(42,26,20,.06);border:1px solid var(--bd);font-size:12px;color:var(--br3);cursor:pointer;font-family:'Figtree',sans-serif;transition:all .18s}
+.d-logout:hover{color:var(--br);border-color:rgba(42,26,20,.3)}
+.d-content{flex:1;overflow:auto;padding:18px}
+.d-mob-nav{display:none;height:60px;background:rgba(240,237,232,.95);backdrop-filter:blur(16px);border-top:1px solid var(--bd);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0)}
+.d-mob-in{display:flex;align-items:center;justify-content:space-around;height:100%}
+.d-mob-ni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 8px;border-radius:10px;background:none;border:none;cursor:pointer;color:var(--br3);font-family:'Figtree',sans-serif;font-size:9.5px;font-weight:400;min-width:50px}
+.d-mob-ni.on{color:var(--tr);font-weight:700}
+.d-mob-ni-ic{font-size:18px}
+
+/* MOBILE SIDEBAR */
+#mob-ov{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.5)}
+#mob-sb{display:none;position:fixed;left:0;top:0;bottom:0;z-index:301}
+#mob-sb .d-sb{animation:sl .3s var(--sp);width:240px}
+
+/* DASHBOARD CARDS */
+.d-card{background:#fff;border-radius:18px;border:1px solid var(--bd)}
+.d-pad{padding:18px}
+.d-kpi-g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.d-kpi{background:#fff;border-radius:16px;border:1px solid var(--bd);padding:14px;transition:transform .28s var(--sp),box-shadow .28s}
+.d-kpi:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(42,26,20,.08)}
+.d-kpi-l{font-size:10.5px;color:var(--br3);margin-bottom:3px}
+.d-kpi-v{font-family:'Fraunces',serif;font-weight:700;font-size:22px;color:var(--br);letter-spacing:-.02em;margin-bottom:3px}
+.d-kpi-tr{display:inline-flex;align-items:center;gap:3px;background:rgba(74,222,128,.10);color:#16a34a;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:600;margin-bottom:9px}
+.d-bars{display:flex;align-items:flex-end;gap:2px;height:34px}
+.d-bar{flex:1;background:linear-gradient(180deg,var(--tr),rgba(196,114,74,.18));border-radius:2px 2px 0 0}
+.d-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.qa-btn{display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:14px;background:var(--cr2);border:1px solid var(--bd);cursor:pointer;width:100%;margin-bottom:8px;font-family:'Figtree',sans-serif;text-align:left;transition:all .2s}
+.qa-btn:hover{background:var(--trs);border-color:var(--tr)}
+.qa-btn:last-child{margin-bottom:0}
+.qa-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.qa-lbl{font-weight:600;font-size:13.5px;color:var(--br)}
+.qa-sub{font-size:11.5px;color:var(--br3);margin-top:1px}
+.d-act{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--bd)}
+.d-act:last-of-type{border-bottom:none}
+.d-act-d{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.d-act-t{font-size:12.5px;color:var(--br2);flex:1;line-height:1.4;min-width:0}
+.d-act-tm{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--br3);flex-shrink:0}
+.d-insight{background:var(--trs);border:1px solid rgba(196,114,74,.2);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+
+/* CHAT */
+.cw{display:flex;flex-direction:column;height:100%;background:#fff;border-radius:20px;border:1px solid var(--bd);overflow:hidden}
+.cw-hdr{padding:13px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:11px;flex-shrink:0;background:#fff}
+.cw-av{width:36px;height:36px;border-radius:50%;background:var(--br);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.cw-live{display:flex;align-items:center;gap:5px;background:rgba(74,222,128,.09);color:#16a34a;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;flex-shrink:0}
+.cw-live-d{width:5px;height:5px;border-radius:50%;background:#16a34a;animation:ping 2s infinite}
+.cw-clear{padding:5px 11px;border-radius:8px;background:rgba(42,26,20,.05);border:1px solid var(--bd);font-size:11.5px;color:var(--br3);cursor:pointer;font-family:'Figtree',sans-serif;transition:all .18s}
+.cw-clear:hover{background:var(--cr2);color:var(--br)}
+.cw-chips{display:flex;gap:7px;overflow-x:auto;padding:10px 14px;border-bottom:1px solid var(--bd);flex-shrink:0}
+.cw-chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;background:var(--cr2);border:1px solid var(--bd);border-radius:999px;padding:6px 12px;font-size:12.5px;color:var(--br2);cursor:pointer;white-space:nowrap;font-family:'Figtree',sans-serif;transition:all .18s}
+.chip:hover{background:var(--trs);border-color:var(--tr);color:var(--tr)}
+.cw-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg-ai{align-self:flex-start;max-width:88%;padding:12px 16px;border-radius:18px 18px 18px 3px;background:var(--cr2);color:var(--br);font-size:14px;font-weight:300;line-height:1.65;border:1px solid var(--bd);word-break:break-word;white-space:pre-wrap;animation:mi .3s var(--sp)}
+.msg-u{align-self:flex-end;max-width:84%;padding:11px 15px;border-radius:18px 18px 3px 18px;background:var(--br);color:#fff;font-size:14px;font-weight:300;line-height:1.65;word-break:break-word;animation:mi .3s var(--sp)}
+.think-wrap{align-self:flex-start;animation:mi .3s var(--sp)}
+.think{padding:10px 16px;background:var(--br);border-radius:14px;display:inline-flex;gap:5px;align-items:center}
+.think-d{width:6px;height:6px;border-radius:50%;background:var(--tr);animation:db .72s ease-in-out infinite}
+.think-d:nth-child(2){animation-delay:.15s}.think-d:nth-child(3){animation-delay:.3s}
+.cw-err{align-self:center;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;padding:10px 16px;font-size:13px;color:#dc2626;cursor:pointer;text-align:center;max-width:90%;animation:mi .3s var(--sp)}
+.msg-actions{display:flex;gap:6px;margin-top:4px;margin-left:4px}
+.m-act{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:7px;background:rgba(42,26,20,.06);border:1px solid var(--bd);font-size:11px;color:var(--br3);cursor:pointer;font-family:'Figtree',sans-serif;transition:all .18s}
+.m-act:hover{background:var(--trs);border-color:var(--tr);color:var(--tr)}
+.m-act.ok{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:#16a34a}
+.cw-inp{padding:12px 14px;border-top:1px solid var(--bd);background:#fff;flex-shrink:0}
+.mic-hint{text-align:center;font-size:12.5px;color:var(--tr);font-weight:500;margin-bottom:7px}
+.cw-row{display:flex;align-items:flex-end;gap:8px}
+.cw-ta{flex:1;background:var(--cr2);border:1.5px solid var(--bd);border-radius:18px;padding:10px 14px;font-size:16px;color:var(--br);resize:none;outline:none;line-height:1.5;font-family:'Figtree',sans-serif;min-height:42px;max-height:120px;transition:border-color .2s;box-sizing:border-box}
+.cw-ta:focus{border-color:var(--tr)}
+.cw-ta::placeholder{color:rgba(42,26,20,.3)}
+.cw-mic{width:42px;height:42px;border-radius:50%;background:var(--cr2);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:17px;transition:all .2s}
+.cw-mic.on{background:rgba(196,114,74,.15);border-color:var(--tr)}
+.cw-send{width:42px;height:42px;border-radius:50%;background:var(--tr);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;transition:all .22s var(--sp)}
+.cw-send:hover:not(:disabled){background:var(--tr2);transform:translateY(-2px) scale(1.05);box-shadow:0 6px 20px rgba(196,114,74,.3)}
+.cw-send:disabled{background:var(--cr3);cursor:not-allowed;transform:none!important;box-shadow:none!important}
+.cw-char{font-size:10px;color:var(--br3);text-align:right;margin-top:5px;font-family:'JetBrains Mono',monospace}
+
+/* OFFER / ANALYZER */
+.oa-wrap{display:grid;grid-template-columns:330px 1fr;gap:16px;height:100%}
+.oa-form{background:#fff;border-radius:18px;border:1px solid var(--bd);padding:22px;overflow-y:auto}
+.oa-result{background:#fff;border-radius:18px;border:1px solid var(--bd);padding:22px;display:flex;flex-direction:column;overflow-y:auto;min-height:280px}
+.f-lbl{display:block;font-size:11px;font-weight:700;color:var(--br2);margin-bottom:5px;letter-spacing:.07em;text-transform:uppercase}
+.f-in{width:100%;background:var(--cr2);border:1.5px solid var(--bd);border-radius:12px;padding:10px 14px;font-size:16px;color:var(--br);outline:none;font-family:'Figtree',sans-serif;transition:border-color .2s,background .2s;box-sizing:border-box}
+.f-in:focus{border-color:var(--tr);background:#fff}
+.f-ta{resize:vertical;line-height:1.5;min-height:80px}
+.f-grp{margin-bottom:14px}
+.s-chips{display:flex;gap:7px;flex-wrap:wrap}
+.s-chip{padding:8px 13px;border-radius:10px;border:1.5px solid var(--bd);background:var(--cr2);color:var(--br3);font-size:13px;font-weight:500;cursor:pointer;font-family:'Figtree',sans-serif;transition:all .18s;text-transform:capitalize}
+.s-chip.on{border-color:var(--tr);background:var(--trs);color:var(--tr)}
+.act-btn{width:100%;padding:14px;border-radius:999px;background:var(--br);color:#fff;font-weight:700;font-size:14.5px;transition:transform .25s var(--sp),box-shadow .25s,opacity .2s;border:none;cursor:pointer;font-family:'Figtree',sans-serif}
+.act-btn.terra{background:var(--tr)}
+.act-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 32px rgba(42,26,20,.12)}
+.act-btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+.act-btn:active:not(:disabled){transform:scale(.97)}
+.res-empty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px}
+.res-empty-h{font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:rgba(42,26,20,.18);text-align:center}
+.d-err{padding:10px 14px;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#dc2626;font-size:13px;margin-bottom:12px;cursor:pointer}
+.copy-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;background:rgba(42,26,20,.06);border:1px solid var(--bd);font-size:11.5px;color:var(--br3);cursor:pointer;font-family:'Figtree',sans-serif;transition:all .2s}
+.copy-btn:hover{background:var(--trs);border-color:var(--tr);color:var(--tr)}
+.copy-btn.ok{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);color:#16a34a}
+
+/* CREDITS */
+.cr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cr-card{border-radius:18px;padding:22px 20px;border:1px solid var(--bd);background:#fff;position:relative;transition:transform .28s var(--sp),box-shadow .28s}
+.cr-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(42,26,20,.10)}
+.cr-card.ft{background:var(--br);border-color:rgba(255,255,255,.1)}
+.cr-tag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--tr);color:#fff;font-size:9.5px;font-weight:700;padding:3px 11px;border-radius:999px;letter-spacing:.1em;white-space:nowrap}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  #l-nav{padding:0 18px}
+  .nav-r .nav-a:not(.nav-cta){display:none}.nav-cta{display:none!important}
+  .ham{display:flex}
+  #hero{grid-template-columns:1fr;padding:92px 22px 70px;text-align:center}
+  .h-h{font-size:clamp(48px,14vw,78px)}
+  .h-sub{margin:0 auto 36px}
+  .h-ctas{justify-content:center}
+  .h-ph{order:-1}.iph{width:228px}.fb-r,.fb-l{display:none}
+  .scue{left:50%;transform:translateX(-50%)}
+  #l-teal{grid-template-columns:1fr;padding:64px 22px;gap:40px;text-align:center}.ps-p{margin:0 auto 22px}
+  #l-tl,#l-typo,#l-rv,#l-testi,#l-cta,#l-faq{padding-left:22px;padding-right:22px}
+  #l-smart{grid-template-columns:1fr;padding:70px 22px;gap:36px}.sm-txt{text-align:left}
+  .fc{padding:56px 22px;min-height:100vh}.fc-in{grid-template-columns:1fr;gap:32px}
+  .kpi-g{grid-template-columns:1fr 1fr}.dw-body{flex-direction:column}.dw-side{display:none}
+  #l-feat{padding:60px 0}.feat-c{min-width:260px}
+  footer{padding:50px 22px 30px}.ft-top{flex-direction:column;gap:26px}.ft-cols{gap:26px}
+  .d-sb{display:none}.d-mob-nav{display:block}
+  .d-topbar{padding:0 14px}.d-content{padding:12px}
+  .d-kpi-g{grid-template-columns:1fr 1fr}.d-grid2{grid-template-columns:1fr}
+  .oa-wrap{grid-template-columns:1fr}.cw{border-radius:0;border:none}
+  .cr-grid{grid-template-columns:1fr}.d-uname{display:none!important}
+}
+@media(max-width:480px){.h-ctas .btn-gl{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     LANDING PAGE
+════════════════════════════════════ -->
+<div id="scr-land" class="scr on">
+
+<nav id="l-nav">
+  <div class="logo" onclick="scrollTo(0,0)">sellr<span class="ai">.ai</span></div>
+  <div class="nav-r">
+    <a class="nav-a" href="#l-feat-s">Features</a>
+    <a class="nav-a" href="#l-rv">Dashboard</a>
+    <a class="nav-a" href="#l-cta">Pricing</a>
+    <button class="nav-a nav-cta" style="padding:10px 22px" onclick="goLogin()">Get started →</button>
+    <button class="ham" id="l-ham" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--br)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div id="mob-m">
+  <button class="mm-x" id="mm-x">✕</button>
+  <div class="mm-card">
+    <a class="mm-row" href="#l-feat-s" onclick="cmm()">Features <span style="opacity:.45">✦</span></a>
+    <a class="mm-row" href="#l-rv" onclick="cmm()">Dashboard <span style="opacity:.45">✦</span></a>
+    <a class="mm-row" href="#l-cta" onclick="cmm()">Pricing <span style="opacity:.45">→</span></a>
+  </div>
+  <div style="margin-top:auto"><button class="mm-get" onclick="goLogin();cmm()">Get started free →</button></div>
+</div>
+
+<section id="hero">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div style="position:relative;z-index:1">
+    <div class="h-badge"><div class="bdot"></div>Now live on Whop</div>
+    <h1 class="h-h">
+      <span class="ln"><span class="wd w1">SELLR</span>&nbsp;<span class="wd w2">makes</span></span>
+      <span class="ln"><span class="wd w3">selling</span></span>
+      <span class="ln"><span class="wd w4">better.</span></span>
+    </h1>
+    <p class="h-sub">The AI sales coach built exclusively for Whop sellers. More revenue, better offers, smarter decisions — all in one place.</p>
+    <div class="h-ctas">
+      <button class="btn-p" onclick="goLogin()">Start for free →</button>
+      <a class="btn-gl" href="#l-rv">See how it works</a>
+    </div>
+  </div>
+  <div class="h-ph">
+    <div class="fbg fb-r"><div class="fb-st">★★★★★</div><div class="fb-tt">Revenue up 34%</div><div class="fb-sb">This month</div></div>
+    <div class="fbg fb-l"><div class="fb-tt">2,400+ sellers</div><div class="fb-sb">On Whop</div></div>
+    <div class="iph">
+      <div class="iph-n"></div><div class="iph-b" style="top:118px"></div><div class="iph-b" style="top:154px"></div><div class="iph-b" style="top:188px"></div>
+      <div class="iph-sc">
+        <div class="iph-hd">Hey you 👋</div>
+        <div class="iph-bl">My store is doing nothing 📦</div>
+        <div class="iph-rp">Let's fix that. I'll create a plan now.</div>
+        <div class="iph-ins"><div class="iph-ins-l">SELLR Insight</div><div class="iph-ins-t">Checkout losing 34% at step 2. Add trust section.</div><div class="iph-ins-tg">+$840/mo est.</div></div>
+        <div class="iph-sh">
+          <div class="iph-ip"><span class="iph-ip-t">Ask me anything...</span><svg style="margin-left:auto;opacity:.4" width="20" height="13" viewBox="0 0 24 16"><path d="M0 8 Q3 2,6 8 Q9 14,12 8 Q15 2,18 8 Q21 14,24 8" fill="none" stroke="#c4724a" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="iph-tabs"><div class="iph-tab on"><div class="iph-tab-ic">🏷</div><span>Offers</span></div><div class="iph-tab"><div class="iph-tab-ic">💬</div><span>Ask</span></div><div class="iph-tab"><div class="iph-tab-ic">📈</div><span>Growth</span></div><div class="iph-tab"><div class="iph-tab-ic">💰</div><span>Revenue</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scue"><span>Scroll</span><svg width="22" height="8" viewBox="0 0 22 8" fill="none"><path d="M1 1 L11 7 L21 1" stroke="rgba(240,237,232,.3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+</section>
+
+<section id="l-teal">
+  <div style="display:flex;justify-content:center" class="rv">
+    <div class="iph" style="width:248px"><div class="iph-n"></div><div class="iph-b" style="top:106px"></div><div class="iph-b" style="top:140px"></div><div class="iph-b" style="top:172px"></div><div class="iph-sc"><div class="iph-hd" style="font-size:21px">Hey you 👋</div><div class="iph-bl" style="font-size:11px">My store is dead 📦</div><div class="iph-rp" style="font-size:11px">Analyzing your store now.</div><div class="iph-ins"><div class="iph-ins-l">SELLR Insight</div><div class="iph-ins-t" style="font-size:11px">Checkout losing 34% at step 2.</div><div class="iph-ins-tg">+$840/mo est.</div></div><div class="iph-sh"><div class="iph-ip"><span class="iph-ip-t" style="font-size:10px">Ask me anything...</span></div><div class="iph-tabs"><div class="iph-tab on"><div class="iph-tab-ic" style="font-size:8.5px">🏷</div><span style="font-size:7.5px">Offers</span></div><div class="iph-tab"><div class="iph-tab-ic" style="font-size:8.5px">💬</div><span style="font-size:7.5px">Ask</span></div><div class="iph-tab"><div class="iph-tab-ic" style="font-size:8.5px">📈</div><span style="font-size:7.5px">Growth</span></div><div class="iph-tab"><div class="iph-tab-ic" style="font-size:8.5px">💰</div><span style="font-size:7.5px">Revenue</span></div></div></div></div></div>
+  </div>
+  <div class="rv d2"><div class="ps-bg">Sell smarter for your Whop store</div><h2 class="ps-h">Sales talk.<br><em>SELLR talks back.</em></h2><p class="ps-p">Your personal AI that knows your store, your audience, and exactly what it takes to turn browsers into buyers — 24/7.</p><button class="btn-gd" onclick="goLogin()">Try it out →</button></div>
+</section>
+
+<section id="l-tl"><h2 class="tl-h rv"><span class="tl-dk">"Sales talk.</span><span class="tl-ac"> SELLR</span><span class="tl-dm"> talks back."</span></h2><p class="tl-p rv d1">Not just an AI. A partner that understands your store, your goals, and how to get you there.</p><button class="btn-gd rv d2" onclick="goLogin()">Try it out →</button></section>
+
+<section id="l-feat-s">
+  <div class="fc fc1"><div class="fc-in"><div class="rv"><div class="fc-bg">Sell Smarter</div><h2 class="fc-h">Your store.<br><em>Amplified.</em></h2><p class="fc-p">SELLR analyzes your Whop store and gives you a prioritized action plan to maximize every dollar.</p><button class="btn-gw" onclick="goLogin()">Start free →</button></div><div class="rv d2"><div class="fc-card"><div class="fc-card-l">SELLR Insight</div><div class="fc-card-h">Checkout losing 34% of buyers at step 2.</div><div class="fc-card-p">Fix: Add trust section + guarantee. Est: +$840/mo.</div><div class="fc-tags"><div class="tag-tr">High Impact</div><div class="tag-dim">+$840/mo est.</div></div></div></div></div></div>
+  <div class="fc fc2"><div class="fc-in"><div class="rv"><h2 class="fc-h">More personalized<br><em>than most people.</em></h2><p class="fc-p">SELLR learns your store, your niche, and your audience — every suggestion tailored to exactly where you are.</p></div><div class="rv d2"><div class="fc-cb">"I just launched. Nobody's buying."</div><div style="margin:10px 0"><div class="st"><span>sellr</span><div class="st-ds"><div class="st-d"></div><div class="st-d"></div><div class="st-d"></div></div></div></div><div class="fc-ar">Your headline is too vague. People don't buy "fitness" — they buy the version of themselves 6 weeks from now. Let's rewrite it.</div></div></div></div>
+  <div class="fc fc3"><div class="fc-in"><div class="rv" style="display:flex;justify-content:center"><div class="mini-ph"><div class="mini-sc"><div class="mini-h">We need<br>to talk.</div><div class="mini-s">Conversion dropped 12% this week.</div></div></div></div><div class="rv d2"><h2 class="fc-h">Smart mind,<br><em>smart mouth.</em></h2><p class="fc-p">SELLR doesn't wait to be asked. It watches your store and alerts you the moment something needs attention.</p><button class="btn-gw" onclick="goLogin()">Get SELLR →</button></div></div></div>
+  <div class="fc fc4"><div class="fc-in"><div class="rv"><h2 class="fc-h">Let AI do the<br><em>heavy lifting.</em></h2><p class="fc-p">Write offers, A/B test copy, plan launches — SELLR handles everything while you focus on selling.</p></div><div class="auto-card rv d2"><div class="auto-bg">Introducing SELLR Autopilot</div><div class="auto-h">Automate your<br><em>sales goals.</em></div><p class="auto-p">Set goals. SELLR builds the plan, writes the copy, and measures results — automatically.</p><button class="btn-gw" onclick="goLogin()">Learn more →</button></div></div></div>
+</section>
+
+<section id="l-typo"><p class="typo-h" id="typo-h"><span class="tw">Let</span><span class="tw">SELLR's</span><span class="tw">AI</span><span class="tw">conquer</span><span class="tw">your</span><span class="tw">dead</span><span class="tw">offers.</span></p></section>
+
+<section id="l-rv">
+  <div class="rv-orb rv-o1"></div><div class="rv-orb rv-o2"></div><div class="rv-scan"></div><div class="rv-grid"></div>
+  <div class="rv-hdr rv"><div class="rv-bg">Your store. Amplified.</div><h2 class="rv-h">Watch your revenue<br><em>come alive.</em></h2></div>
+  <div class="dw rvs d1">
+    <div class="dw-ch"><div class="dw-ls"><div class="dw-l" style="background:#ff5f57"></div><div class="dw-l" style="background:#febc2e"></div><div class="dw-l" style="background:#28c840"></div></div><div class="dw-url">app.sellr.ai/dashboard</div></div>
+    <div class="dw-body">
+      <div class="dw-side"><div class="dw-logo-p">sellr<span class="ai">.ai</span></div><div><div class="dw-ni on"><div class="dw-nid"></div>Dashboard</div><div class="dw-ni"><div class="dw-nid"></div>AI Chat</div><div class="dw-ni"><div class="dw-nid"></div>Offer Builder</div><div class="dw-ni"><div class="dw-nid"></div>Store Analyzer</div></div><div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:5px"><svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="19" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="5"/><circle cx="26" cy="26" r="19" fill="none" stroke="#c4724a" stroke-width="5" stroke-dasharray="119" stroke-dashoffset="29" stroke-linecap="round" transform="rotate(-90 26 26)"/><text x="26" y="30" text-anchor="middle" font-family="Figtree,sans-serif" font-weight="700" font-size="10" fill="#fff">18</text></svg><span style="font-size:9px;color:rgba(255,255,255,.22)">credits</span></div></div>
+      <div class="dw-main">
+        <div class="dw-gr">Hey Alex 👋</div>
+        <div class="kpi-g"><div class="kpi"><div class="kpi-l">Revenue (7d)</div><div class="kpi-v" id="kv1">$0</div><div class="kpi-t">↑ 12.4%</div></div><div class="kpi"><div class="kpi-l">Orders</div><div class="kpi-v" id="kv2">0</div><div class="kpi-t">↑ 8.1%</div></div><div class="kpi"><div class="kpi-l">Conversion</div><div class="kpi-v" id="kv3">0%</div><div class="kpi-t">↑ 0.4%</div></div><div class="kpi"><div class="kpi-l">Store Score</div><div class="kpi-v" id="kv4">0</div><div class="kpi-t">↑ 5pts</div></div></div>
+        <div class="dw-ch2"><div class="dw-ch2-l">Revenue · Last 7 days</div><div class="bars" id="l-bars"><div class="bar" data-h="45" style="height:0"></div><div class="bar" data-h="33" style="height:0"></div><div class="bar" data-h="55" style="height:0"></div><div class="bar" data-h="79" style="height:0"></div><div class="bar" data-h="67" style="height:0"></div><div class="bar" data-h="90" style="height:0"></div><div class="bar" data-h="100" style="height:0"></div></div></div>
+        <div><div style="font-size:10px;color:rgba(255,255,255,.22);margin-bottom:7px;letter-spacing:.07em;text-transform:uppercase">Recent Activity</div><div class="act-r"><div class="act-d"></div><div class="act-t">New order: "Elite Bundle" · <strong style="color:rgba(255,255,255,.72)">$47</strong></div><div class="act-tm">2m ago</div></div><div class="act-r"><div class="act-d" style="background:#4ade80"></div><div class="act-t">Checkout optimized → CTR +8%</div><div class="act-tm">14m ago</div></div><div class="act-r"><div class="act-d" style="background:#60a5fa"></div><div class="act-t">Store score updated: <strong style="color:rgba(255,255,255,.72)">82/100</strong></div><div class="act-tm">1h ago</div></div><div style="margin-top:12px;display:flex;align-items:center;gap:8px"><div class="st" style="transform:scale(.82);transform-origin:left"><span>sellr</span><div class="st-ds"><div class="st-d"></div><div class="st-d"></div><div class="st-d"></div></div></div><span style="font-size:11px;color:rgba(255,255,255,.28);font-style:italic">Analyzing opportunities...</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1100px;margin:16px auto 0;display:flex;gap:12px;flex-wrap:wrap;pointer-events:none">
+    <div style="background:#fff;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:500;color:var(--br);box-shadow:0 8px 32px rgba(42,26,20,.10);animation:fl 3.2s ease-in-out infinite">📈 Revenue up 34% this month</div>
+    <div style="background:#fff;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:500;color:var(--br);box-shadow:0 8px 32px rgba(42,26,20,.10);animation:fl 4s ease-in-out infinite;animation-delay:-1.2s">🏆 #1 Tool for Whop Sellers</div>
+    <div style="background:#fff;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:500;color:var(--br);box-shadow:0 8px 32px rgba(42,26,20,.10);animation:fl 3.6s ease-in-out infinite;animation-delay:-2s">⚡ 2,400 active sellers</div>
+  </div>
+</section>
+
+<section id="l-smart"><div class="sm-card rv"><div class="sm-ph"><div class="sm-psc"><div class="sm-ph-h">We need<br>to talk.</div><div class="sm-ph-s">Conversion dropped 12% this week.</div></div></div></div><div class="sm-txt rv d2"><h2 class="sm-h">Smart mind,<br>smart mouth.</h2><p class="sm-p">SELLR's intelligent enough to optimize every dollar, and sharp enough to spot what's killing your sales before it costs you more.</p><button class="btn-gd" onclick="goLogin()">Get SELLR →</button></div></section>
+
+<section id="l-testi">
+  <h2 class="rv">The internet has spoken</h2>
+  <div class="t-ctrl rv d1"><button class="t-arr" id="t-prev">←</button><div class="t-dots"><div class="t-dot on" data-i="0"></div><div class="t-dot" data-i="1"></div><div class="t-dot" data-i="2"></div></div><button class="t-arr" id="t-next">→</button></div>
+  <div class="t-card rvs" id="t-card">
+    <div class="t-top"><svg width="200" height="200" viewBox="0 0 200 200"><defs><radialGradient id="ptg" cx="50%" cy="40%"><stop offset="0%" stop-color="#f5d5c5"/><stop offset="100%" stop-color="#e8b89a"/></radialGradient></defs><rect width="200" height="200" fill="url(#ptg)"/><g fill="#c4724a"><circle cx="100" cy="52" r="3" opacity=".7"/><circle cx="88" cy="58" r="2.5" opacity=".8"/><circle cx="112" cy="58" r="2.5" opacity=".8"/><circle cx="80" cy="68" r="2"/><circle cx="120" cy="68" r="2"/><circle cx="88" cy="84" r="2.5"/><circle cx="112" cy="84" r="2.5"/><circle cx="100" cy="130" r="3" opacity=".8"/></g></svg></div>
+    <div class="t-bot"><p class="t-q" id="t-q">"SELLR helped me 3x my Whop revenue in 6 weeks. It's like having a world-class sales consultant in your pocket — for free."</p><div class="t-a" id="t-a">Marcus T. · Fitness Course Creator, Whop</div></div>
+  </div>
+</section>
+
+<section id="l-feat"><div class="feat-lbl">SELLR's Features</div><div class="feat-tr" id="feat-tr"><div class="feat-c f1"><svg class="feat-ic" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="rgba(196,114,74,.6)" stroke-width="1.8"/><path d="M11 22 L15 17.5 L19 19.5 L23 13" stroke="#c4724a" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><div class="feat-h"><strong>Store</strong><span>Analyzer</span></div><p class="feat-p">Deep AI analysis with score, insights, and a prioritized action plan.</p></div><div class="feat-c f2"><svg class="feat-ic" viewBox="0 0 34 34" fill="none"><rect x="3" y="8" width="28" height="20" rx="4" stroke="rgba(100,160,255,.6)" stroke-width="1.8"/><path d="M3 15h28" stroke="rgba(100,160,255,.6)" stroke-width="1.4"/></svg><div class="feat-h"><strong>Offer</strong><span>Builder</span></div><p class="feat-p">AI writes high-converting headlines, bullets, and CTAs in seconds.</p></div><div class="feat-c f3"><svg class="feat-ic" viewBox="0 0 34 34" fill="none"><path d="M5 17 Q10 7,17 17 Q24 27,29 17" stroke="rgba(200,100,255,.6)" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="5" cy="17" r="2.5" fill="rgba(200,100,255,.6)"/><circle cx="29" cy="17" r="2.5" fill="rgba(200,100,255,.6)"/></svg><div class="feat-h"><strong>A/B</strong><span>Tester</span></div><p class="feat-p">Test two copy versions. AI picks the winner with confidence score.</p></div><div class="feat-c f4"><svg class="feat-ic" viewBox="0 0 34 34" fill="none"><rect x="4" y="4" width="26" height="26" rx="4" stroke="rgba(100,220,130,.6)" stroke-width="1.8"/><path d="M11 20 L15.5 15.5 L19.5 18 L23 11" stroke="rgba(100,220,130,.6)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><div class="feat-h"><strong>Launch</strong><span>Builder</span></div><p class="feat-p">Full multi-channel launch plans with day-by-day tasks.</p></div><div class="feat-c f5"><svg class="feat-ic" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="13" r="6" stroke="rgba(255,200,100,.6)" stroke-width="1.8"/><path d="M7 29 Q7 22,17 22 Q27 22,27 29" stroke="rgba(255,200,100,.6)" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><div class="feat-h"><strong>AI</strong><span>Coach</span></div><p class="feat-p">24/7 sales coaching tailored to your specific Whop store.</p></div></div></section>
+
+<section id="l-cta">
+  <h2 class="cta-h rv">Get early access.<br><em>It's free.</em></h2>
+  <div class="cta-box rvs d1">
+    <div id="wl-form">
+      <div class="f-grp"><label class="f-lbl">Your name</label><input class="wl-in" id="wl-name" type="text" placeholder="Your name" autocomplete="name"></div>
+      <div class="f-grp"><label class="f-lbl">Email</label><input class="wl-in" id="wl-email" type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <button class="wl-btn" id="wl-btn">Join waitlist — it's free →</button>
+      <div class="trust-r"><span class="trust-i">Free forever</span><span class="trust-i">No credit card</span><span class="trust-i">Cancel anytime</span></div>
+    </div>
+    <div id="wl-ok"><div class="wl-chk">✓</div><div class="wl-ok-h">You're on the list!</div><p class="wl-ok-p">You're <span class="wl-pos">#<span id="wl-pos">248</span></span> in line.</p></div>
+  </div>
+</section>
+
+<section id="l-faq">
+  <h2 class="rv">FAQs</h2>
+  <div class="faq-box rv d1">
+    <div class="faq-item open"><button class="faq-btn">What can SELLR do for my store?<div class="faq-ic">+</div></button><div class="faq-ans"><div class="faq-ai">SELLR is a full AI sales coach for Whop sellers. It analyzes your store, writes offer copy, A/B tests headlines, builds launch plans, and coaches you through any sales challenge — all in real time, powered by Claude AI.</div></div></div>
+    <div class="faq-item"><button class="faq-btn">Is SELLR free to use?<div class="faq-ic">+</div></button><div class="faq-ans"><div class="faq-ai">You start with 20 free credits — no credit card required. Each AI action uses 1–3 credits. Buy more starting at $19.</div></div></div>
+    <div class="faq-item"><button class="faq-btn">Does it really use Claude AI?<div class="faq-ic">+</div></button><div class="faq-ans"><div class="faq-ai">Yes — SELLR is powered by Anthropic's Claude Sonnet, one of the most capable AI models available. Every response is generated live, tailored to your specific store context.</div></div></div>
+    <div class="faq-item"><button class="faq-btn">Can I sign in with Whop?<div class="faq-ic">+</div></button><div class="faq-ans"><div class="faq-ai">Yes! Click "Continue with Whop" on the login screen. SELLR uses official Whop OAuth so your account is securely connected. We never store your Whop password.</div></div></div>
+    <div class="faq-item"><button class="faq-btn">Works for any Whop product?<div class="faq-ic">+</div></button><div class="faq-ans"><div class="faq-ai">Yes — courses, communities, templates, newsletters, coaching, software, digital downloads. SELLR adapts to your product type and audience.</div></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-top">
+    <div><div class="ft-logo" onclick="scrollTo(0,0)">sellr<span class="ai">.ai</span></div><div class="ft-tag">SELLR makes<br><em>selling better.</em></div></div>
+    <div class="ft-cols">
+      <div class="ft-col"><h4>Product</h4><a onclick="goLogin()">Dashboard</a><a onclick="goLogin()">AI Chat</a><a onclick="goLogin()">Offer Builder</a><a onclick="goLogin()">Get started</a></div>
+      <div class="ft-col"><h4>Company</h4><a href="https://v0-sellrai-website-clone.vercel.app" target="_blank" rel="noopener">Website</a><a>Blog</a><a onclick="goLogin()">Contact</a></div>
+      <div class="ft-col"><h4>Legal</h4><a>Privacy</a><a>Terms</a><a>Security</a></div>
+    </div>
+  </div>
+  <div class="ft-bot"><div class="ft-d">© 2026 SELLR.ai · Built for Whop sellers</div><div class="ft-d">Powered by Claude AI</div></div>
+</footer>
+</div><!-- /scr-land -->
+
+<!-- ════════════════════════════════════
+     LOGIN
+════════════════════════════════════ -->
+<div id="scr-login" class="scr">
+  <div class="orb o1" style="position:absolute"></div>
+  <div class="orb o2" style="position:absolute"></div>
+  <div class="l-card">
+    <div class="l-logo">sellr<span class="ai">.ai</span></div>
+    <div class="l-sub">Sign in to your AI sales dashboard</div>
+    <div id="l-err" class="l-err"></div>
+    <div id="l-loading" class="l-loading" style="display:none"><div class="spinner"></div>Connecting to Whop...</div>
+    <div id="l-form-body">
+      <label class="l-lbl">Email</label>
+      <input class="l-in" id="l-email" type="email" placeholder="your@email.com" autocomplete="email">
+      <label class="l-lbl">Password</label>
+      <input class="l-in" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      <button class="l-btn" id="l-btn">Sign in →</button>
+      <div class="l-sep">or</div>
+      <button class="l-whop" id="l-whop-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#c4724a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Continue with Whop
+      </button>
+      <div class="l-back">← <span onclick="goLanding()">Back to home</span> &nbsp;·&nbsp; No account? <span onclick="startDemo()">Try demo</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════ -->
+<div id="scr-dash" class="scr">
+  <div class="d-sb" id="d-sb">
+    <div class="d-sb-logo"><div class="d-sb-logo-t">sellr<span class="ai">.ai</span></div><div class="d-sb-logo-s">AI Sales Coach</div></div>
+    <div id="d-nav"></div>
+    <div class="d-credits-box"><div class="d-cr-ring" id="d-cr-num">18</div><div><div class="d-cr-t">18 credits left</div><button class="d-cr-link" onclick="dashNav('credits')">Get more →</button></div></div>
+  </div>
+  <div class="d-main">
+    <div class="d-topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button id="d-ham" style="display:none;width:38px;height:38px;border-radius:10px;background:rgba(42,26,20,.06);border:none;cursor:pointer;font-size:20px;align-items:center;justify-content:center;flex-shrink:0">☰</button>
+        <span class="d-title" id="d-title">Dashboard</span>
+      </div>
+      <div class="d-user">
+        <span class="d-uname" id="d-uname"></span>
+        <div class="d-av" id="d-av">AK</div>
+        <button class="d-logout" onclick="doLogout()">Logout</button>
+      </div>
+    </div>
+    <div class="d-content" id="d-content"></div>
+    <div class="d-mob-nav"><div class="d-mob-in" id="d-mob-nav"></div></div>
+  </div>
+</div>
+
+<!-- Mobile sidebar -->
+<div id="mob-ov" onclick="closeMobSb()"></div>
+<div id="mob-sb">
+  <div class="d-sb" id="mob-d-sb">
+    <div class="d-sb-logo"><div class="d-sb-logo-t">sellr<span class="ai">.ai</span></div><div class="d-sb-logo-s">AI Sales Coach</div></div>
+    <div id="mob-d-nav"></div>
+    <div class="d-credits-box"><div class="d-cr-ring">18</div><div><div class="d-cr-t">18 credits</div><button class="d-cr-link" onclick="dashNav('credits');closeMobSb()">Get more →</button></div></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   CONSTANTS & STATE
+══════════════════════════════════════════ */
+'use strict';
+
+// Config — set WHOP_CLIENT_ID in Netlify env vars
+// For static HTML, we read it from a meta tag (set by netlify.toml or inject snippet)
+const WHOP_CLIENT_ID = document.querySelector('meta[name="whop-client-id"]')?.content || '';
+const WHOP_REDIRECT_URI = window.location.origin + '/oauth/callback.html';
+const PKCE_KEY = 'whop_pkce_v1';
+const USER_KEY = 'sellr_user_v1';
+const TOKEN_KEY = 'sellr_tokens_v1';
+
+let user = null;
+let activeView = 'dashboard';
+let chatMsgs = [];
+let chatLoading = false;
+let offerStyle = 'bold';
+let micRec = null;
+let micOn = false;
+
+const NAV_ITEMS = [
+  { id:'dashboard', emoji:'⊞', label:'Dashboard' },
+  { id:'chat',      emoji:'💬', label:'AI Chat'   },
+  { id:'offers',    emoji:'✍️', label:'Offer Builder' },
+  { id:'store',     emoji:'🔍', label:'Store Analyzer' },
+  { id:'credits',   emoji:'⚡', label:'Credits'   },
+];
+
+/* ══════════════════════════════════════════
+   SCREEN MANAGEMENT
+══════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  const el = document.getElementById('scr-' + id);
+  if (el) el.classList.add('on');
+  if (id !== 'dash') window.scrollTo(0, 0);
+}
+function goLogin()   { resetLoginForm(); showScreen('login'); }
+function goLanding() { showScreen('land'); }
+
+function resetLoginForm() {
+  const err = document.getElementById('l-err');
+  if (err) { err.style.display = 'none'; err.textContent = ''; }
+  const fb = document.getElementById('l-form-body');
+  const ld = document.getElementById('l-loading');
+  if (fb) fb.style.display = '';
+  if (ld) ld.style.display = 'none';
+  ['l-email','l-pass'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('err'); el.disabled = false; }
+  });
+  const btn = document.getElementById('l-btn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Sign in →'; }
+  const wbtn = document.getElementById('l-whop-btn');
+  if (wbtn) { wbtn.disabled = false; wbtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#c4724a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Continue with Whop'; }
+}
+
+function showLoginErr(msg) {
+  const el = document.getElementById('l-err');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  // Re-enable buttons
+  const btn = document.getElementById('l-btn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Sign in →'; }
+  const wbtn = document.getElementById('l-whop-btn');
+  if (wbtn) { wbtn.disabled = false; wbtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#c4724a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Continue with Whop'; }
+  const fb = document.getElementById('l-form-body');
+  const ld = document.getElementById('l-loading');
+  if (fb) fb.style.display = '';
+  if (ld) ld.style.display = 'none';
+}
+
+/* ══════════════════════════════════════════
+   EMAIL / DEMO AUTH
+══════════════════════════════════════════ */
+function doLogin() {
+  const emailEl = document.getElementById('l-email');
+  const passEl  = document.getElementById('l-pass');
+  const btn     = document.getElementById('l-btn');
+  const email   = emailEl.value.trim();
+  const pass    = passEl.value;
+  const errEl   = document.getElementById('l-err');
+
+  if (errEl) errEl.style.display = 'none';
+  emailEl.classList.remove('err');
+  passEl.classList.remove('err');
+
+  if (!email.includes('@')) { emailEl.classList.add('err'); return; }
+  if (pass.length < 3)      { passEl.classList.add('err');  return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+
+  const name = email.split('@')[0];
+  const capName = name.charAt(0).toUpperCase() + name.slice(1);
+  setUser({ name: capName, email, initials: name.slice(0, 2).toUpperCase(), picture: '' });
+  enterDash();
+}
+
+function startDemo() {
+  setUser({ name: 'Alex', email: 'demo@sellr.ai', initials: 'AK', picture: '' });
+  enterDash();
+}
+
+/* ══════════════════════════════════════════
+   WHOP OAUTH 2.1 + PKCE
+══════════════════════════════════════════ */
+function b64url(bytes) {
+  return btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+function randStr(len) {
+  return b64url(crypto.getRandomValues(new Uint8Array(len)));
+}
+async function sha256b64(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return b64url(new Uint8Array(buf));
+}
+
+async function startWhopOAuth() {
+  if (!WHOP_CLIENT_ID) {
+    showLoginErr('Whop OAuth not configured. Add WHOP_CLIENT_ID meta tag or use email login.');
+    return;
+  }
+  try {
+    const pkce = {
+      codeVerifier: randStr(32),
+      state: randStr(16),
+      nonce: randStr(16),
+    };
+    sessionStorage.setItem(PKCE_KEY, JSON.stringify(pkce));
+
+    const codeChallenge = await sha256b64(pkce.codeVerifier);
+
+    const params = new URLSearchParams({
+      response_type:         'code',
+      client_id:             WHOP_CLIENT_ID,
+      redirect_uri:          WHOP_REDIRECT_URI,
+      scope:                 'openid profile email',
+      state:                 pkce.state,
+      nonce:                 pkce.nonce,
+      code_challenge:        codeChallenge,
+      code_challenge_method: 'S256',
+    });
+
+    window.location.href = 'https://api.whop.com/oauth/authorize?' + params.toString();
+  } catch (e) {
+    showLoginErr('Failed to start Whop login: ' + e.message);
+  }
+}
+
+// Called from oauth/callback.html via postMessage
+function handleOAuthMessage(event) {
+  if (event.origin !== window.location.origin) return;
+  const { type, payload } = event.data || {};
+  if (type !== 'WHOP_OAUTH_SUCCESS') return;
+
+  const { user: u, tokens } = payload;
+  if (tokens) {
+    sessionStorage.setItem(TOKEN_KEY, JSON.stringify({ ...tokens, obtained_at: Date.now() }));
+  }
+  setUser(u);
+  enterDash();
+}
+
+/* ══════════════════════════════════════════
+   USER
+══════════════════════════════════════════ */
+function setUser(u) {
+  user = u;
+  sessionStorage.setItem(USER_KEY, JSON.stringify(u));
+}
+
+function enterDash() {
+  if (!user) return;
+
+  // Avatar
+  const av = document.getElementById('d-av');
+  if (av) {
+    if (user.picture) {
+      av.innerHTML = `<img src="${user.picture}" alt="${user.initials}" onerror="this.parentNode.textContent='${user.initials}'">`;
+    } else {
+      av.textContent = user.initials || 'AK';
+    }
+  }
+
+  const un = document.getElementById('d-uname');
+  if (un) un.textContent = user.name || '';
+
+  // Mobile ham
+  const ham = document.getElementById('d-ham');
+  if (ham) {
+    ham.style.display = window.innerWidth < 768 ? 'flex' : 'none';
+    ham.onclick = openMobSb;
+  }
+
+  buildNav();
+  dashNav('dashboard');
+  showScreen('dash');
+}
+
+function doLogout() {
+  user = null;
+  chatMsgs = [];
+  sessionStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(PKCE_KEY);
+  showScreen('land');
+}
+
+/* ══════════════════════════════════════════
+   SIDEBAR / NAV
+══════════════════════════════════════════ */
+function buildNav() {
+  const html = NAV_ITEMS.map(n => `
+    <button class="d-ni${n.id === activeView ? ' on' : ''}" id="si-${n.id}" onclick="dashNav('${n.id}')">
+      <span class="d-ni-ic">${n.emoji}</span>${n.label}
+    </button>`).join('');
+
+  const mobHtml = NAV_ITEMS.map(n => `
+    <button class="d-mob-ni${n.id === activeView ? ' on' : ''}" id="mi-${n.id}" onclick="dashNav('${n.id}')">
+      <span class="d-mob-ni-ic">${n.emoji}</span>${n.label.split(' ')[0]}
+    </button>`).join('');
+
+  const mobSbHtml = NAV_ITEMS.map(n => `
+    <button class="d-ni${n.id === activeView ? ' on' : ''}" onclick="dashNav('${n.id}');closeMobSb()">
+      <span class="d-ni-ic">${n.emoji}</span>${n.label}
+    </button>`).join('');
+
+  const nav = document.getElementById('d-nav');
+  if (nav) nav.innerHTML = html;
+  const mob = document.getElementById('d-mob-nav');
+  if (mob) mob.innerHTML = mobHtml;
+  const mobSb = document.getElementById('mob-d-nav');
+  if (mobSb) mobSb.innerHTML = mobSbHtml;
+}
+
+function dashNav(id) {
+  activeView = id;
+
+  const label = NAV_ITEMS.find(n => n.id === id)?.label || '';
+  const titleEl = document.getElementById('d-title');
+  if (titleEl) titleEl.textContent = label;
+
+  // Update active classes
+  document.querySelectorAll('.d-ni, .d-mob-ni').forEach(b => b.classList.remove('on'));
+  ['si-', 'mi-'].forEach(p => {
+    const el = document.getElementById(p + id);
+    if (el) el.classList.add('on');
+  });
+
+  const content = document.getElementById('d-content');
+  if (!content) return;
+  content.style.overflow = (id === 'chat') ? 'hidden' : 'auto';
+
+  const renders = {
+    dashboard: renderDash,
+    chat:      renderChat,
+    offers:    renderOffers,
+    store:     renderStore,
+    credits:   renderCredits,
+  };
+  if (renders[id]) renders[id](content);
+}
+
+function openMobSb() {
+  document.getElementById('mob-ov').style.display = 'block';
+  document.getElementById('mob-sb').style.display = 'block';
+  buildNav();
+}
+function closeMobSb() {
+  document.getElementById('mob-ov').style.display = 'none';
+  document.getElementById('mob-sb').style.display = 'none';
+}
+
+/* ══════════════════════════════════════════
+   API — calls /api/chat.js on Netlify
+══════════════════════════════════════════ */
+async function askSELLR(messages) {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages }),
+  });
+  if (!res.ok) {
+    let msg = 'Server error ' + res.status;
+    try { const d = await res.json(); msg = d.error || msg; } catch(_) {}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.text || '';
+}
+
+/* ══════════════════════════════════════════
+   DASHBOARD VIEW
+══════════════════════════════════════════ */
+function renderDash(el) {
+  const nm = (user?.name || 'there').split(' ')[0];
+  const mob = window.innerWidth < 768;
+
+  el.innerHTML = `
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div style="background:linear-gradient(135deg,#2d3a45,#1e2d38);border-radius:18px;padding:${mob?'18px':'24px'};position:relative;overflow:hidden">
+      <div style="position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(ellipse,rgba(196,114,74,.16),transparent 70%);pointer-events:none"></div>
+      <div style="font-family:'Fraunces',serif;font-weight:300;font-size:${mob?20:26}px;color:#fff;margin-bottom:6px">Hey, ${nm} 👋</div>
+      <div style="font-size:13.5px;font-weight:300;color:rgba(240,237,232,.62);margin-bottom:18px">Revenue up 12.4% this week. SELLR found 3 new opportunities.</div>
+      <button onclick="dashNav('chat')" style="display:inline-flex;align-items:center;gap:7px;background:var(--tr);color:#fff;padding:10px 20px;border-radius:999px;border:none;font-weight:700;font-size:14px;cursor:pointer;font-family:'Figtree',sans-serif;transition:opacity .2s">💬 Ask SELLR now</button>
+    </div>
+    <div class="d-kpi-g" id="d-kpi-g"></div>
+    <div class="d-grid2">
+      <div class="d-card d-pad">
+        <div style="font-family:'Fraunces',serif;font-weight:700;font-size:16px;color:var(--br);margin-bottom:14px">Quick Actions</div>
+        <button class="qa-btn" onclick="dashNav('chat')">
+          <div class="qa-ic" style="background:#2a1a14">💬</div>
+          <div><div class="qa-lbl">Ask SELLR</div><div class="qa-sub">Instant sales advice</div></div>
+        </button>
+        <button class="qa-btn" onclick="dashNav('offers')">
+          <div class="qa-ic" style="background:#c4724a">✍️</div>
+          <div><div class="qa-lbl">Write an Offer</div><div class="qa-sub">AI-generated copy</div></div>
+        </button>
+        <button class="qa-btn" onclick="dashNav('store')">
+          <div class="qa-ic" style="background:#2d3a45">🔍</div>
+          <div><div class="qa-lbl">Analyze Store</div><div class="qa-sub">Find revenue leaks</div></div>
+        </button>
+      </div>
+      <div class="d-card d-pad">
+        <div style="font-family:'Fraunces',serif;font-weight:700;font-size:16px;color:var(--br);margin-bottom:14px">Recent Activity</div>
+        <div class="d-act"><div class="d-act-d" style="background:#c4724a"></div><div class="d-act-t">New order: "Elite Bundle" · <strong>$47</strong></div><div class="d-act-tm">2m ago</div></div>
+        <div class="d-act"><div class="d-act-d" style="background:#4ade80"></div><div class="d-act-t">Checkout optimized → CTR +8%</div><div class="d-act-tm">14m ago</div></div>
+        <div class="d-act"><div class="d-act-d" style="background:#60a5fa"></div><div class="d-act-t">Store score: <strong>82/100</strong></div><div class="d-act-tm">1h ago</div></div>
+        <div class="d-act" style="border:none"><div class="d-act-d" style="background:#e8956d"></div><div class="d-act-t">3 offer variants generated</div><div class="d-act-tm">2h ago</div></div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--bd)">
+          <div class="think"><div class="think-d"></div><div class="think-d"></div><div class="think-d"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="d-insight">
+      <div style="width:34px;height:34px;border-radius:10px;background:var(--tr);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">⚡</div>
+      <div style="flex:1;min-width:180px">
+        <div style="font-weight:600;font-size:13.5px;color:var(--br);margin-bottom:3px">💡 SELLR Insight</div>
+        <div style="font-size:13px;color:var(--br2);font-weight:300">Checkout losing 34% at step 2. Add a trust section → +$840/mo est.</div>
+      </div>
+      <button onclick="dashNav('chat')" style="background:var(--tr);color:#fff;padding:8px 16px;border-radius:999px;border:none;font-weight:600;font-size:13px;cursor:pointer;font-family:'Figtree',sans-serif;flex-shrink:0">Fix it →</button>
+    </div>
+  </div>`;
+
+  // KPIs
+  const kpis = [
+    { l:'Revenue (7d)', v:'$4,280', t:'+12.4%', d:[45,33,55,79,67,90,100] },
+    { l:'Orders',       v:'847',    t:'+8.1%',  d:[60,45,70,80,75,88,95]  },
+    { l:'Conversion',   v:'3.8%',   t:'+0.4%',  d:[30,28,35,38,36,40,42]  },
+    { l:'Store Score',  v:'82/100', t:'+5pts',  d:[65,68,70,74,77,80,82]  },
+  ];
+  const grid = document.getElementById('d-kpi-g');
+  if (!grid) return;
+  grid.innerHTML = kpis.map(k => {
+    const max = Math.max(...k.d);
+    const bars = k.d.map((v,i) => `<div class="d-bar" style="height:${Math.round((v/max)*100)}%;opacity:${i===k.d.length-1?1:0.45+i*0.07}"></div>`).join('');
+    return `<div class="d-kpi">
+      <div class="d-kpi-l">${k.l}</div>
+      <div class="d-kpi-v">${k.v}</div>
+      <div class="d-kpi-tr">↑ ${k.t}</div>
+      <div class="d-bars">${bars}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════
+   CHAT VIEW
+══════════════════════════════════════════ */
+const CHIPS = [
+  "Why isn't my store converting?",
+  "Write my offer headline",
+  "How to price my community?",
+  "Roast my sales page",
+  "Create a 7-day launch plan",
+  "What upsells should I add?",
+  "Improve my product description",
+  "How to grow on Whop?",
+];
+
+function renderChat(el) {
+  const nm = (user?.name || 'there').split(' ')[0];
+  if (!chatMsgs.length) {
+    chatMsgs = [{ role:'assistant', content:`Hey ${nm} 👋 I'm SELLR — your AI sales coach built exclusively for Whop.\n\nAsk me anything about your store, pricing, offers, or copy. I give specific, real advice — no fluff.\n\nWhat's the biggest problem with your Whop store right now?` }];
+  }
+
+  el.innerHTML = `
+  <div class="cw">
+    <div class="cw-hdr">
+      <div class="cw-av">S</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px;color:var(--br)">SELLR</div>
+        <div style="font-size:11px;color:var(--br3)">AI Sales Coach · Powered by Claude</div>
+      </div>
+      <div class="cw-live"><div class="cw-live-d"></div>Live</div>
+      <button class="cw-clear" onclick="clearChat()">Clear</button>
+    </div>
+    <div id="cw-chips" class="cw-chips">${CHIPS.map(c=>`<button class="chip" onclick="chipSend(this)">${c}</button>`).join('')}</div>
+    <div class="cw-msgs" id="cw-msgs"></div>
+    <div class="cw-inp">
+      <div id="mic-hint" class="mic-hint" style="display:none">🎤 Listening... speak now</div>
+      <div class="cw-row">
+        <textarea class="cw-ta" id="cw-ta" rows="1" placeholder="Ask about your Whop store..." maxlength="800"></textarea>
+        <button class="cw-mic" id="cw-mic" style="display:none" title="Voice input" onclick="toggleMic()">🎤</button>
+        <button class="cw-send" id="cw-send" disabled onclick="sendMsg()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <div class="cw-char" id="cw-char">0/800 · Enter to send</div>
+    </div>
+  </div>`;
+
+  renderMessages();
+  initTA();
+  initMic();
+}
+
+function renderMessages() {
+  const area = document.getElementById('cw-msgs');
+  if (!area) return;
+  area.innerHTML = '';
+  chatMsgs.forEach((m, i) => appendMsg(m, i, area));
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendMsg(m, i, area) {
+  if (!area) area = document.getElementById('cw-msgs');
+  if (!area) return;
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `display:flex;flex-direction:column;align-items:${m.role==='user'?'flex-end':'flex-start'};gap:4px`;
+
+  const bubble = document.createElement('div');
+  bubble.className = m.role === 'user' ? 'msg-u' : 'msg-ai';
+  bubble.textContent = m.content;
+  wrap.appendChild(bubble);
+
+  if (m.role === 'assistant' && i > 0) {
+    const acts = document.createElement('div');
+    acts.className = 'msg-actions';
+    const key = encodeURIComponent(m.content);
+    acts.innerHTML = `
+      <button class="m-act" onclick="copyMsgText(this,'${key}')">⎘ Copy</button>
+      <button class="m-act" onclick="speakText(this,'${key}')">🔊 Listen</button>`;
+    wrap.appendChild(acts);
+  }
+
+  area.appendChild(wrap);
+  area.scrollTop = area.scrollHeight;
+}
+
+function copyMsgText(btn, key) {
+  navigator.clipboard?.writeText(decodeURIComponent(key)).catch(() => {});
+  btn.className = 'm-act ok';
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => { btn.className = 'm-act'; btn.innerHTML = '⎘ Copy'; }, 2000);
+}
+
+let ttsUtterance = null;
+function speakText(btn, key) {
+  if (!window.speechSynthesis) return;
+  if (ttsUtterance) {
+    window.speechSynthesis.cancel();
+    ttsUtterance = null;
+    btn.innerHTML = '🔊 Listen';
+    return;
+  }
+  const text = decodeURIComponent(key).slice(0, 500);
+  ttsUtterance = new SpeechSynthesisUtterance(text);
+  ttsUtterance.rate = 1.05;
+  const voices = window.speechSynthesis.getVoices();
+  const v = voices.find(v => v.name.includes('Samantha') || v.lang === 'en-US');
+  if (v) ttsUtterance.voice = v;
+  ttsUtterance.onend = () => { ttsUtterance = null; btn.innerHTML = '🔊 Listen'; };
+  ttsUtterance.onerror = () => { ttsUtterance = null; btn.innerHTML = '🔊 Listen'; };
+  btn.innerHTML = '⏹ Stop';
+  window.speechSynthesis.speak(ttsUtterance);
+}
+
+function initTA() {
+  const ta   = document.getElementById('cw-ta');
+  const send = document.getElementById('cw-send');
+  const char = document.getElementById('cw-char');
+  if (!ta) return;
+
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+    if (char) char.textContent = ta.value.length + '/800 · Enter to send';
+    if (send) send.disabled = !ta.value.trim() || chatLoading;
+  });
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+  });
+}
+
+function initMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  const micBtn = document.getElementById('cw-mic');
+  if (micBtn) micBtn.style.display = 'flex';
+  micRec = new SR();
+  micRec.continuous = false; micRec.interimResults = false; micRec.lang = 'en-US';
+  micRec.onresult = e => {
+    const t = e.results[0]?.[0]?.transcript || '';
+    if (t) sendMsg(t);
+  };
+  micRec.onend  = () => { micOn = false; updateMicUI(); };
+  micRec.onerror = () => { micOn = false; updateMicUI(); };
+}
+
+function toggleMic() {
+  if (!micRec) return;
+  if (micOn) { micRec.stop(); micOn = false; }
+  else       { try { micRec.start(); micOn = true; } catch(e) { micOn = false; } }
+  updateMicUI();
+}
+function updateMicUI() {
+  const btn  = document.getElementById('cw-mic');
+  const hint = document.getElementById('mic-hint');
+  if (btn)  btn.className  = 'cw-mic' + (micOn ? ' on' : '');
+  if (hint) hint.style.display = micOn ? 'block' : 'none';
+}
+
+function chipSend(btn) {
+  const chips = document.getElementById('cw-chips');
+  if (chips) chips.style.display = 'none';
+  sendMsg(btn.textContent);
+}
+
+async function sendMsg(override) {
+  const ta   = document.getElementById('cw-ta');
+  const send = document.getElementById('cw-send');
+  const area = document.getElementById('cw-msgs');
+  const char = document.getElementById('cw-char');
+  const text = (override || (ta ? ta.value : '')).trim();
+  if (!text || chatLoading) return;
+
+  if (ta)   { ta.value = ''; ta.style.height = 'auto'; }
+  if (char) char.textContent = '0/800 · Enter to send';
+  if (send) send.disabled = true;
+  chatLoading = true;
+
+  chatMsgs.push({ role:'user', content:text });
+  appendMsg({ role:'user', content:text }, chatMsgs.length - 1, area);
+
+  // Thinking indicator
+  const tw = document.createElement('div');
+  tw.className = 'think-wrap';
+  tw.innerHTML = '<div class="think"><div class="think-d"></div><div class="think-d"></div><div class="think-d"></div></div>';
+  if (area) { area.appendChild(tw); area.scrollTop = area.scrollHeight; }
+
+  try {
+    const reply = await askSELLR(chatMsgs);
+    if (tw.parentNode) tw.parentNode.removeChild(tw);
+    chatMsgs.push({ role:'assistant', content:reply });
+    appendMsg({ role:'assistant', content:reply }, chatMsgs.length - 1, area);
+  } catch (e) {
+    if (tw.parentNode) tw.parentNode.removeChild(tw);
+    const errEl = document.createElement('div');
+    errEl.className = 'cw-err';
+    errEl.textContent = '⚠️ ' + (e.message || 'Error. Try again.');
+    errEl.onclick = () => errEl.remove();
+    if (area) { area.appendChild(errEl); area.scrollTop = area.scrollHeight; }
+  }
+
+  chatLoading = false;
+  if (send && ta) send.disabled = !ta.value.trim();
+  if (area) area.scrollTop = area.scrollHeight;
+}
+
+function clearChat() {
+  chatMsgs = [{ role:'assistant', content:'Fresh start 🔥 What do you want to work on?' }];
+  renderMessages();
+  const chips = document.getElementById('cw-chips');
+  if (chips) chips.style.display = 'flex';
+}
+
+/* ══════════════════════════════════════════
+   OFFER BUILDER
+══════════════════════════════════════════ */
+function renderOffers(el) {
+  const mob = window.innerWidth < 768;
+  el.innerHTML = `
+  <div class="oa-wrap" style="${mob?'grid-template-columns:1fr':''} height:100%">
+    <div class="oa-form">
+      <div style="font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--br);margin-bottom:4px">Offer Builder</div>
+      <div style="font-size:13px;color:var(--br3);margin-bottom:20px;font-weight:300">SELLR writes your copy — headline, bullets, CTA, and more.</div>
+      <div class="f-grp"><label class="f-lbl">Product / Service</label><input class="f-in" id="of-prod" type="text" placeholder="e.g. Fitness coaching community, email templates"></div>
+      <div class="f-grp"><label class="f-lbl">Target Audience</label><textarea class="f-in f-ta" id="of-aud" placeholder="e.g. Online coaches making under $5k/mo" rows="2"></textarea></div>
+      <div class="f-grp"><label class="f-lbl">Main Outcome</label><input class="f-in" id="of-out" type="text" placeholder="e.g. Double revenue in 60 days"></div>
+      <div class="f-grp"><label class="f-lbl">Price Point</label><input class="f-in" id="of-price" type="text" placeholder="e.g. $47/mo, $197 one-time"></div>
+      <div class="f-grp">
+        <label class="f-lbl">Copy Style</label>
+        <div class="s-chips">
+          ${['bold','soft','urgency','story'].map(s=>`<button class="s-chip${s==='bold'?' on':''}" onclick="setStyle(this,'${s}')">${s}</button>`).join('')}
+        </div>
+      </div>
+      <div id="of-err"></div>
+      <button class="act-btn terra" id="of-btn" onclick="buildOffer()">Generate Offer Copy →</button>
+    </div>
+    <div class="oa-result" id="of-result-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-shrink:0">
+        <div style="font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--br)">Generated Copy</div>
+        <div id="of-copy-btn"></div>
+      </div>
+      <div id="of-result" style="flex:1">
+        <div class="res-empty"><div class="res-empty-h">Your offer copy appears here</div><div style="font-size:13px;color:rgba(42,26,20,.15)">Fill in the form and click Generate</div></div>
+      </div>
+    </div>
+  </div>`;
+  offerStyle = 'bold';
+}
+
+function setStyle(btn, s) {
+  document.querySelectorAll('.s-chip').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  offerStyle = s;
+}
+
+async function buildOffer() {
+  const prod  = document.getElementById('of-prod')?.value.trim();
+  const aud   = document.getElementById('of-aud')?.value.trim();
+  const out   = document.getElementById('of-out')?.value.trim();
+  const price = document.getElementById('of-price')?.value.trim();
+  const errEl = document.getElementById('of-err');
+  const btn   = document.getElementById('of-btn');
+  const res   = document.getElementById('of-result');
+  const cSlot = document.getElementById('of-copy-btn');
+
+  if (!prod) {
+    if (errEl) errEl.innerHTML = '<div class="d-err" onclick="this.remove()">⚠️ Product name is required.</div>';
+    return;
+  }
+  if (errEl) errEl.innerHTML = '';
+  if (btn)   { btn.disabled = true; btn.textContent = 'Writing your offer...'; }
+  if (res)   res.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:200px;flex-direction:column;gap:12px"><div class="think"><div class="think-d"></div><div class="think-d"></div><div class="think-d"></div></div><div style="font-size:13.5px;color:var(--br3);font-style:italic">Writing your offer...</div></div>`;
+
+  try {
+    const prompt = `Write a complete high-converting Whop offer page for:\n\nProduct: ${prod}\nAudience: ${aud || 'not specified'}\nOutcome: ${out || 'not specified'}\nPrice: ${price || 'not specified'}\nStyle: ${offerStyle}\n\nProvide exactly:\n\n**HEADLINE** (under 10 words, outcome-focused)\n\n**SUBHEADLINE** (1 punchy sentence)\n\n**BULLET POINTS** (5 benefits, start each with ✓, outcomes not features)\n\n**CTA BUTTON** (under 6 words)\n\n**TRUST LINE** (social proof or guarantee)\n\n---\n**CRITIQUE:** What is strongest, and the single best A/B test to run first.`;
+    const text = await askSELLR([{ role:'user', content:prompt }]);
+    if (res) res.innerHTML = `<div style="font-size:13.5px;color:var(--br);line-height:1.8;white-space:pre-wrap;font-weight:300">${escHtml(text)}</div>`;
+    if (cSlot) cSlot.innerHTML = `<button class="copy-btn" onclick="copyText(this,${JSON.stringify(text)})">⎘ Copy</button>`;
+  } catch(e) {
+    if (res) res.innerHTML = `<div class="d-err" onclick="this.remove()">⚠️ ${escHtml(e.message || 'Error. Try again.')}</div>`;
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Generate Offer Copy →'; }
+}
+
+/* ══════════════════════════════════════════
+   STORE ANALYZER
+══════════════════════════════════════════ */
+function renderStore(el) {
+  const mob = window.innerWidth < 768;
+  el.innerHTML = `
+  <div class="oa-wrap" style="${mob?'grid-template-columns:1fr':''} height:100%">
+    <div class="oa-form">
+      <div style="font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--br);margin-bottom:4px">Store Analyzer</div>
+      <div style="font-size:13px;color:var(--br3);margin-bottom:20px;font-weight:300">Describe your store and get an instant AI revenue diagnosis.</div>
+      <div class="f-grp"><label class="f-lbl">Whop Store URL</label><input class="f-in" id="an-url" type="text" placeholder="whop.com/your-store"></div>
+      <div class="f-grp"><label class="f-lbl">Describe Your Store</label><textarea class="f-in f-ta" id="an-desc" placeholder="What do you sell? Who is your audience? What is your price? Current conversion rate? What problems are you facing?" rows="8" style="min-height:130px"></textarea></div>
+      <div id="an-err"></div>
+      <button class="act-btn" id="an-btn" onclick="runAnalysis()">Analyze My Store →</button>
+    </div>
+    <div class="oa-result">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-shrink:0">
+        <div style="font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--br)">Analysis Report</div>
+        <div id="an-copy-btn"></div>
+      </div>
+      <div id="an-result" style="flex:1">
+        <div class="res-empty"><div class="res-empty-h">Your report appears here</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function runAnalysis() {
+  const url  = document.getElementById('an-url')?.value.trim();
+  const desc = document.getElementById('an-desc')?.value.trim();
+  const errEl = document.getElementById('an-err');
+  const btn   = document.getElementById('an-btn');
+  const res   = document.getElementById('an-result');
+  const cSlot = document.getElementById('an-copy-btn');
+
+  if (!desc) {
+    if (errEl) errEl.innerHTML = '<div class="d-err" onclick="this.remove()">⚠️ Please describe your store.</div>';
+    return;
+  }
+  if (errEl) errEl.innerHTML = '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Analyzing...'; }
+  if (res) res.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:200px;flex-direction:column;gap:12px"><div class="think"><div class="think-d"></div><div class="think-d"></div><div class="think-d"></div></div><div style="font-size:13.5px;color:var(--br3);font-style:italic">Analyzing your store...</div></div>`;
+
+  try {
+    const prompt = `Analyze this Whop store and give a complete sales diagnostic:\n\nURL: ${url || 'not provided'}\nDescription: ${desc}\n\nProvide a structured report:\n\n**OVERALL SCORE: X/100**\nOne-line verdict.\n\n**TOP 3 REVENUE LEAKS**\nFor each: Problem → Impact → Exact Fix → Est. Revenue Recovery\n\n**QUICK WINS (this week)**\n3 specific things they can do in under 2 hours.\n\n**OFFER REVIEW**\nIs positioning clear? Is the price right? What is missing?\n\n**GROWTH POTENTIAL**\nEstimate monthly revenue increase if all issues are fixed.\n\n→ Next step: The single most important thing to do today.\n\nBe direct, specific, and honest. No generic advice.`;
+    const text = await askSELLR([{ role:'user', content:prompt }]);
+    if (res) res.innerHTML = `<div style="font-size:13.5px;color:var(--br);line-height:1.8;white-space:pre-wrap;font-weight:300">${escHtml(text)}</div>`;
+    if (cSlot) cSlot.innerHTML = `<button class="copy-btn" onclick="copyText(this,${JSON.stringify(text)})">⎘ Copy</button>`;
+  } catch(e) {
+    if (res) res.innerHTML = `<div class="d-err" onclick="this.remove()">⚠️ ${escHtml(e.message || 'Error. Try again.')}</div>`;
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Analyze My Store →'; }
+}
+
+/* ══════════════════════════════════════════
+   CREDITS VIEW
+══════════════════════════════════════════ */
+function renderCredits(el) {
+  const plans = [
+    { n:'Starter', p:19, cr:200, feats:['Store Analyzer','Offer Builder','AI Chat','A/B Tester','Never expires'], ft:false },
+    { n:'Pro',     p:49, cr:600, feats:['Everything in Starter','Launch Builder','Unlimited history','Priority support','Early features'], ft:true },
+    { n:'Scale',   p:99, cr:1500,feats:['Everything in Pro','Founder access','PDF reports','Custom integrations','1:1 onboarding'], ft:false },
+  ];
+  const mob = window.innerWidth < 768;
+
+  el.innerHTML = `
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="d-card d-pad">
+      <div style="font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--br);margin-bottom:4px">Credits & Billing</div>
+      <div style="font-size:13px;color:var(--br3);margin-bottom:18px;font-weight:300">Credits power all AI features and never expire.</div>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:16px">
+        <div>
+          <div style="font-size:11.5px;color:var(--br3);margin-bottom:3px">Credits remaining</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <span style="font-family:'Fraunces',serif;font-weight:900;font-size:48px;color:var(--tr)">18</span>
+            <span style="font-size:16px;color:var(--br3)">/ 20</span>
+          </div>
+        </div>
+        <svg width="68" height="68" viewBox="0 0 68 68"><circle cx="34" cy="34" r="26" fill="none" stroke="var(--cr2)" stroke-width="6"/><circle cx="34" cy="34" r="26" fill="none" stroke="var(--tr)" stroke-width="6" stroke-dasharray="163" stroke-dashoffset="147" stroke-linecap="round" transform="rotate(-90 34 34)"/></svg>
+      </div>
+      <div style="background:var(--cr2);border-radius:12px;padding:12px 16px;font-size:13px;color:var(--br2);font-weight:300">
+        <strong style="color:var(--br)">Credit costs:</strong> AI Chat = 1 · Offer Builder = 2 · Store Analyzer = 3 · Launch Builder = 3
+      </div>
+    </div>
+    <div class="cr-grid" style="${mob?'grid-template-columns:1fr':''}">
+      ${plans.map(p => `
+        <div class="cr-card${p.ft?' ft':''}">
+          ${p.ft?'<div class="cr-tag">BEST VALUE</div>':''}
+          <div style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px;color:${p.ft?'rgba(255,255,255,.45)':'var(--br3)'}">
+            ${p.n}
+          </div>
+          <div style="font-family:'Fraunces',serif;font-weight:900;font-size:40px;letter-spacing:-.03em;margin-bottom:3px;color:${p.ft?'#fff':'var(--br)'}">
+            $${p.p}
+          </div>
+          <div style="font-size:12px;margin-bottom:13px;color:${p.ft?'rgba(255,255,255,.38)':'var(--br3)'}">one-time · never expires</div>
+          <div style="background:${p.ft?'rgba(255,255,255,.08)':'rgba(42,26,20,.05)'};border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:16px;color:${p.ft?'rgba(255,255,255,.7)':'var(--br2)'}">
+            ⚡ ${p.cr} credits
+          </div>
+          ${p.feats.map((f,j) => `
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;font-size:12.5px;border-bottom:${j<p.feats.length-1?`1px solid ${p.ft?'rgba(255,255,255,.07)':'var(--bd)'}`:0};color:${p.ft?'rgba(255,255,255,.65)':'var(--br2)'}">
+              <span style="color:var(--tr)">✓</span>${f}
+            </div>`).join('')}
+          <button style="width:100%;padding:12px;border-radius:999px;font-family:'Figtree',sans-serif;background:${p.ft?'var(--tr)':'transparent'};color:${p.ft?'#fff':'var(--br)'};border:${p.ft?'none':'1.5px solid var(--bd)'};font-weight:700;font-size:14px;cursor:pointer;margin-top:16px;transition:opacity .2s">
+            Get ${p.n} →
+          </button>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════ */
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyText(btn, text) {
+  navigator.clipboard?.writeText(text).catch(() => {});
+  btn.className = 'copy-btn ok';
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => { btn.className = 'copy-btn'; btn.innerHTML = '⎘ Copy'; }, 2000);
+}
+
+/* ══════════════════════════════════════════
+   LANDING PAGE JS
+══════════════════════════════════════════ */
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('l-nav')?.classList.toggle('stuck', scrollY > 80);
+}, { passive: true });
+
+// Mobile menu
+document.getElementById('l-ham')?.addEventListener('click', () => document.getElementById('mob-m')?.classList.add('open'));
+document.getElementById('mm-x')?.addEventListener('click',  () => document.getElementById('mob-m')?.classList.remove('open'));
+function cmm() { document.getElementById('mob-m')?.classList.remove('open'); }
+
+// Login form events
+document.getElementById('l-btn')?.addEventListener('click', doLogin);
+document.getElementById('l-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('l-email')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('l-pass')?.focus(); });
+document.getElementById('l-whop-btn')?.addEventListener('click', () => {
+  const btn = document.getElementById('l-whop-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-color:var(--bd);border-top-color:var(--tr)"></div> Connecting...'; }
+  startWhopOAuth();
+});
+
+// Scroll reveal
+(function() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: .10, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.rv, .rvs').forEach(el => obs.observe(el));
+})();
+
+// Typo bleed
+(function() {
+  const words = document.querySelectorAll('.tw');
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      words.forEach((w, i) => setTimeout(() => w.classList.add('lit'), i * 130));
+      obs.disconnect();
+    }
+  }, { threshold: .35 });
+  const h = document.getElementById('typo-h');
+  if (h) obs.observe(h);
+})();
+
+// KPI counters
+(function() {
+  let done = false;
+  function count(el, to, pre, suf, dec) {
+    if (!el) return;
+    const dur = 1350, s = performance.now();
+    (function step(n) {
+      const p = Math.min((n - s) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + (dec ? (to * e).toFixed(1) : Math.round(to * e)) + suf;
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !done) {
+      done = true; obs.disconnect();
+      setTimeout(() => {
+        count(document.getElementById('kv1'), 4280, '$', '',  false);
+        count(document.getElementById('kv2'), 847,  '',  '',  false);
+        count(document.getElementById('kv3'), 3.8,  '',  '%', true);
+        count(document.getElementById('kv4'), 82,   '',  '/100', false);
+        document.querySelectorAll('#l-bars .bar').forEach((b, i) => {
+          setTimeout(() => { b.style.height = b.dataset.h + '%'; }, 350 + i * 85);
+        });
+      }, 300);
+    }
+  }, { threshold: .18 });
+  const rv = document.getElementById('l-rv');
+  if (rv) obs.observe(rv);
+})();
+
+// Testimonials
+(function() {
+  const data = [
+    { q: '"SELLR helped me 3x my Whop revenue in 6 weeks. It\'s like having a world-class sales consultant in your pocket — for free."', a: 'Marcus T. · Fitness Course Creator, Whop' },
+    { q: '"I rewrote my offer using SELLR\'s suggestions. Conversion went from 1.1% to 4.3% in 10 days. Absolutely insane."', a: 'Jenna R. · Digital Templates Seller, Whop' },
+    { q: '"Every Whop seller needs SELLR. It caught things in my funnel I\'d been blind to for months."', a: 'Alex L. · Online Community Builder, Whop' },
+  ];
+  let cur = 0;
+  const qEl   = document.getElementById('t-q');
+  const aEl   = document.getElementById('t-a');
+  const card  = document.getElementById('t-card');
+  const dots  = document.querySelectorAll('.t-dot');
+
+  function go(i) {
+    cur = (i + 3) % 3;
+    if (card) { card.style.opacity = '0'; card.style.transform = 'translateX(18px)'; }
+    setTimeout(() => {
+      if (qEl) qEl.textContent = data[cur].q;
+      if (aEl) aEl.textContent = data[cur].a;
+      dots.forEach((d, j) => d.classList.toggle('on', j === cur));
+      if (card) {
+        card.style.transition = 'opacity .38s, transform .38s var(--sp)';
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+      }
+    }, 200);
+  }
+
+  document.getElementById('t-next')?.addEventListener('click', () => go(cur + 1));
+  document.getElementById('t-prev')?.addEventListener('click', () => go(cur - 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+  setInterval(() => go(cur + 1), 5500);
+})();
+
+// Features horizontal scroll
+(function() {
+  const t = document.getElementById('feat-tr');
+  if (!t) return;
+  t.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.preventDefault(); t.scrollLeft += e.deltaY * .7; }
+  }, { passive: false });
+  let dn = false, sx = 0, sl = 0;
+  t.addEventListener('mousedown', e => { dn = true; sx = e.pageX - t.offsetLeft; sl = t.scrollLeft; t.style.userSelect = 'none'; });
+  ['mouseleave','mouseup'].forEach(ev => t.addEventListener(ev, () => { dn = false; t.style.userSelect = ''; }));
+  t.addEventListener('mousemove', e => { if (!dn) return; e.preventDefault(); t.scrollLeft = sl - (e.pageX - t.offsetLeft - sx) * 1.2; });
+})();
+
+// FAQ
+document.querySelectorAll('.faq-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const was  = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!was) item.classList.add('open');
+  });
+});
+
+// Waitlist
+(function() {
+  const btn = document.getElementById('wl-btn');
+  if (!btn) return;
+  ['wl-name','wl-email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => el.classList.remove('err'));
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+    }
+  });
+  btn.addEventListener('click', () => {
+    const n = document.getElementById('wl-name')?.value.trim();
+    const e = document.getElementById('wl-email')?.value.trim();
+    let ok = true;
+    if (!n) { document.getElementById('wl-name')?.classList.add('err'); ok = false; }
+    if (!e || !e.includes('@')) { document.getElementById('wl-email')?.classList.add('err'); ok = false; }
+    if (!ok) return;
+    document.getElementById('wl-form').style.display = 'none';
+    document.getElementById('wl-ok').style.display = 'block';
+    document.getElementById('wl-pos').textContent = Math.floor(Math.random() * 60) + 230;
+  });
+})();
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (!href || href === '#') { e.preventDefault(); return; }
+    const target = document.querySelector(href);
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+window.addEventListener('message', handleOAuthMessage);
+
+window.addEventListener('DOMContentLoaded', () => {
+  // Restore session
+  const stored = sessionStorage.getItem(USER_KEY);
+  if (stored) {
+    try {
+      user = JSON.parse(stored);
+      enterDash();
+      return;
+    } catch(_) { sessionStorage.removeItem(USER_KEY); }
+  }
+  showScreen('land');
+});
+
+// Handle resize
+window.addEventListener('resize', () => {
+  const ham = document.getElementById('d-ham');
+  if (ham) ham.style.display = window.innerWidth < 768 ? 'flex' : 'none';
+});
+</script>
+</body>
+</html>
