@@ -1,0 +1,103 @@
+"use client";
+import { motion } from "framer-motion";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { ArrowRight, Sparkles, MessageCircle, BarChart3 } from "lucide-react";
+import Link from "next/link";
+
+export default function LandingPage() {
+  return (
+    <main className="min-h-screen bg-hero overflow-hidden relative">
+      {/* Background Orbs */}
+      <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-terracotta/20 rounded-full blur-[120px] pointer-events-none animate-pulse" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-cream/5 rounded-full blur-[100px] pointer-events-none" />
+
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center backdrop-blur-md bg-hero/50 border-b border-white/5">
+        <div className="bg-white text-brown px-5 py-2 rounded-full font-serif font-bold text-xl cursor-pointer hover:scale-105 transition-transform">
+          sellr<span className="text-terracotta">.ai</span>
+        </div>
+        <Link href="/dashboard" className="btn-primary text-sm py-3 px-6 hidden md:block">
+          Get Started →
+        </Link>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative pt-40 pb-32 px-6 flex flex-col items-center text-center z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-2 bg-terracotta/15 border border-terracotta/30 text-terracotta px-4 py-1.5 rounded-full mb-8 font-sans text-sm font-medium"
+        >
+          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+          Now live for Whop Sellers
+        </motion.div>
+
+        <motion.h1 
+          variants={staggerContainer} initial="hidden" animate="visible"
+          className="font-serif text-white text-[4rem] md:text-[7rem] leading-[0.95] tracking-tight mb-8"
+        >
+          <motion.div variants={fadeInUp}>SELLR makes</motion.div>
+          <motion.div variants={fadeInUp} className="italic font-light text-cream/90">selling</motion.div>
+          <motion.div variants={fadeInUp} className="text-terracotta">better.</motion.div>
+        </motion.h1>
+
+        <motion.p 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+          className="font-sans text-lg md:text-2xl text-cream/60 max-w-2xl mb-12"
+        >
+          The most powerful AI sales coach ever created. Connect your store, fix your dead offers, and watch your revenue come alive.
+        </motion.p>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
+          className="flex flex-col md:flex-row gap-4"
+        >
+          <Link href="/dashboard" className="btn-primary text-lg">Start selling smarter →</Link>
+          <button className="btn-ghost text-lg">See how it works</button>
+        </motion.div>
+      </section>
+
+      {/* iPhone Mockup Section (Cleo Vibe) */}
+      <section className="relative py-24 bg-gradient-to-br from-[#b8d4c8] via-[#8fb8a8] to-[#6a9990] flex justify-center px-6">
+        <motion.div 
+          initial={{ y: 100, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
+          className="w-[320px] h-[650px] bg-[#1a1a2e] rounded-[48px] border-[12px] border-[#1a1a2e] shadow-2xl relative overflow-hidden flex flex-col"
+        >
+          {/* Notch */}
+          <div className="absolute top-0 inset-x-0 h-6 flex justify-center">
+             <div className="w-32 h-6 bg-[#1a1a2e] rounded-b-2xl"></div>
+          </div>
+          
+          {/* Screen */}
+          <div className="flex-1 bg-gradient-to-b from-[#f5d5c5] to-[#e8b89a] rounded-[32px] pt-16 px-5 flex flex-col">
+            <h2 className="font-serif text-3xl font-bold text-brown mb-6">Hey you</h2>
+            
+            <div className="bg-white/90 text-brown px-4 py-3 rounded-2xl rounded-tr-sm self-end max-w-[85%] font-sans text-sm shadow-sm mb-4">
+              My store is doing absolutely nothing 📦🔥
+            </div>
+            
+            <div className="text-brown/90 px-2 py-2 self-start max-w-[90%] font-sans text-[15px] leading-relaxed mb-auto">
+              You say this every Monday 🙂 It's time to fix this. I've analyzed your Whop checkout and I'm creating a 3-step recovery plan.
+            </div>
+
+            {/* Fake Bottom Input */}
+            <div className="bg-white rounded-t-[32px] p-6 pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] -mx-5 -mb-2 mt-4">
+              <div className="bg-cream-dark rounded-full px-4 py-3 text-brown-light text-sm flex justify-between items-center mb-6">
+                Ask me anything... <Sparkles size={16} className="text-terracotta"/>
+              </div>
+              <div className="flex justify-between px-4 text-brown-light">
+                <BarChart3 size={24} />
+                <MessageCircle size={24} className="text-terracotta" />
+                <ArrowRight size={24} />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        <div className="hidden md:flex absolute right-20 top-1/2 -translate-y-1/2 max-w-sm flex-col">
+          <h2 className="font-serif text-5xl text-brown mb-4 leading-tight">Sales talk. <br/><span className="text-white">SELLR talks back.</span></h2>
+          <p className="font-sans text-brown/80 text-lg">Stop guessing what's wrong with your store. Get direct, brutal, and highly profitable advice instantly.</p>
+        </div>
+      </section>
+    </main>
+  );
+}

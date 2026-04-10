@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-brown antialiased selection:bg-terracotta selection:text-white;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Noise/Grain Texture */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-lg-custom rounded-[24px];
+  }
+  .pill-input {
+    @apply bg-cream-dark border border-border rounded-full px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-terracotta/30 transition-all font-sans;
+  }
+  .btn-primary {
+    @apply bg-terracotta text-white rounded-full px-8 py-4 font-bold tracking-wide hover:-translate-y-1 hover:shadow-glow-terra active:scale-95 transition-all duration-300;
+  }
+  .btn-ghost {
+    @apply bg-transparent border-2 border-white/20 text-white rounded-full px-8 py-4 font-bold hover:bg-white/10 hover:-translate-y-1 active:scale-95 transition-all duration-300;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
